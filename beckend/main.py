@@ -38,18 +38,19 @@ def chat(request: ChatRequest):
         )
 
         response = client.chat.completions.create(
-            model="llama3-8b-8192",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are an AI Product Expert. Help users choose the best products."
-                },
-                {
-                    "role": "user",
-                    "content": request.message
-                }
-            ]
-        )
+    model="llama-3.1-8b-instant",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are an AI Product Expert. Help users choose the best products."
+        },
+        {
+            "role": "user",
+            "content": request.message
+        }
+    ]
+)
+
 
         reply = response.choices[0].message.content
 
