@@ -264,7 +264,7 @@ async function sendMessage() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ messages: chatHistory })
+            body: JSON.stringify({ message: message })
         });
 
         const data = await response.json();
