@@ -187,9 +187,24 @@ async function sendMessage() {
         });
 
         const botMsg = document.createElement("div");
-        botMsg.className = "message bot";
-        botMsg.innerHTML = marked.parse(data.reply || "Something went wrong.");
-        messagesDiv.appendChild(botMsg);
+botMsg.className = "message bot";
+messagesDiv.appendChild(botMsg);
+
+const fullText = data.reply || "Something went wrong.";
+let currentText = "";
+let index = 0;
+
+function typeEffect() {
+    if (index < fullText.length) {
+        currentText += fullText[index];
+        botMsg.innerHTML = marked.parse(currentText);
+        index++;
+        setTimeout(typeEffect, 10); // speed control (lower = faster)
+    }
+}
+
+typeEffect();
+  
 
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
