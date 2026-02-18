@@ -200,6 +200,32 @@ button:hover {
 
 let chatHistory = [];
 
+// Load chat from localStorage on page load
+window.onload = function() {
+    const savedChat = localStorage.getItem("chatHistory");
+
+    if (savedChat) {
+        chatHistory = JSON.parse(savedChat);
+
+        const messagesDiv = document.getElementById("messages");
+
+        chatHistory.forEach(msg => {
+            const msgDiv = document.createElement("div");
+            msgDiv.className = "message " + (msg.role === "user" ? "user" : "bot");
+
+            if (msg.role === "assistant") {
+                msgDiv.innerHTML = marked.parse(msg.content);
+            } else {
+                msgDiv.innerText = msg.content;
+            }
+
+            messagesDiv.appendChild(msgDiv);
+        });
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+};
+
 async function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
@@ -218,6 +244,9 @@ async function sendMessage() {
         role: "user",
         content: message
     });
+
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+
 
     input.value = "";
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -247,6 +276,8 @@ async function sendMessage() {
             role: "assistant",
             content: data.reply
         });
+
+        localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
 
         const botMsg = document.createElement("div");
 botMsg.className = "message bot";
