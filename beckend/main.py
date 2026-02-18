@@ -1,4 +1,5 @@
 import os
+from typing import List
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -9,7 +10,7 @@ load_dotenv()
 
 app = FastAPI(title="AI Product Expert API")
 
-# ✅ CORS (Vercel frontend ko allow karega)
+# ✅ CORS (Vercel frontend allow)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # production me specific domain dal sakte ho
@@ -18,16 +19,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Request Model
+# ✅ Message model (for chat history)
+class Message(BaseModel):
+    role: str
+    content: str
+
+# ✅ Request model (list of messages)
 class ChatRequest(BaseModel):
-    message: str
+    messages: List[Message]
 
-
-# ✅ Health check route (Render ke liye important)
+# ✅ Health check
 @app.get("/")
 def home():
     return {"status": "API is running 🚀"}
-
 
 # ✅ Chat endpoint
 @app.post("/chat")
@@ -37,20 +41,18 @@ def chat(request: ChatRequest):
             api_key=os.getenv("GROQ_API_KEY")
         )
 
-        response = client.chat.completions.create(
-    model="llama-3.1-8b-instant",
-    messages=[
-        {
-            "role": "system",
-            "content": "You are an AI Product Expert. Help users choose the best products."
-        },
-        {
-            "role": "user",
-            "content": request.message
-        }
-    ]
-)
+        # System prompt + full chat history
+        all_messages = [
+            {
+                "role": "system",
+                "content": "You are an AI Product Expert. Help users choose the best products. Remember previous conversation context."
+            }
+        ] + [msg.dict() for msg in request.messages]
 
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=all_messages
+        )
 
         reply = response.choices[0].message.content
 
