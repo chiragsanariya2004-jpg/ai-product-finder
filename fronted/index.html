@@ -264,10 +264,20 @@ async function sendMessage() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify({ messages: chatHistory })
         });
 
+        if (!response.ok) {
+            throw new Error("API error");
+        }
+
         const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error);
+        }
+
+
 
         loadingMsg.remove();
 

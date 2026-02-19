@@ -37,9 +37,13 @@ def home():
 @app.post("/chat")
 def chat(request: ChatRequest):
     try:
-        client = Groq(
-            api_key=os.getenv("GROQ_API_KEY")
-        )
+        api_key = os.getenv("GROQ_API_KEY")
+
+        if not api_key:
+            return {"error": "GROQ API key not found"}
+
+        client = Groq(api_key=api_key)
+
 
         # System prompt + full chat history
         all_messages = [
