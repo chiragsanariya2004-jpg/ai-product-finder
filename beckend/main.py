@@ -56,15 +56,18 @@ async def chat(data: ChatRequest):
         client = Groq(api_key=api_key)
 
         # Add new user messages to memory
-        conversation_store[user_id].extend(data.messages)
+        new_message = data.messages[0]
+
+        # Add new user message to memory
+        conversation_store[user_id].append(new_message)
 
         # 🔥 Smart memory control (last 10 messages only)
-        recent_messages = conversation_store[user_id][-10:]
+        recent_messages = conversation_store[user_id][-20:]
 
         all_messages = [
             {
                 "role": "system",
-                "content": "You are an AI Product Expert."
+                "content": "You are an AI Product Expert. Always use previous conversation context to understand references like 'this', 'that', or 'translate this'."
             }
         ] + [msg.dict() for msg in recent_messages]
 
