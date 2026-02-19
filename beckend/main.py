@@ -69,7 +69,7 @@ async def chat(data: ChatRequest):
                 "role": "system",
                 "content": "You are an AI Product Expert. Always use previous conversation context to understand references like 'this', 'that', or 'translate this'."
             }
-        ] + [msg.dict() for msg in recent_messages]
+        ] + recent_messages
 
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
