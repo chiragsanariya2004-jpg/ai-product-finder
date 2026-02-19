@@ -1,6 +1,7 @@
 import os
 from typing import List
 from fastapi import FastAPI
+from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
@@ -24,6 +25,9 @@ class Message(BaseModel):
     role: str
     content: str
 
+    class Config:
+        extra = "allow"
+
 # ✅ Request model (list of messages)
 class ChatRequest(BaseModel):
     messages: List[Message]
@@ -35,26 +39,26 @@ def home():
 
 # ✅ Chat endpoint
 @app.post("/chat")
-def chat(request: ChatRequest):
+async def chat(request: Request):
     try:
-        api_key = os.getenv("GROQ_API_KEY")
+        body = await request.json()
+        messages = body.get("messages", [])
 
+        api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
             return {"error": "GROQ API key not found"}
 
         client = Groq(api_key=api_key)
 
-
-        # System prompt + full chat history
         all_messages = [
             {
                 "role": "system",
-                "content": "You are an AI Product Expert. Help users choose the best products. Remember previous conversation context."
+                "content": "You are an AI Product Expert."
             }
-        ] + [msg.dict() for msg in request.messages]
+        ] + messages
 
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="llama3-8b-8192",
             messages=all_messages
         )
 
@@ -63,4 +67,6 @@ def chat(request: ChatRequest):
         return {"reply": reply}
 
     except Exception as e:
+        print("ERROR:", str(e))
         return {"error": str(e)}
+    
