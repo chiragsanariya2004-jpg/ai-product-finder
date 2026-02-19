@@ -2,6 +2,7 @@ import os
 from typing import List
 from fastapi import FastAPI
 from fastapi import Request
+from fastapi import Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from groq import Groq
@@ -38,11 +39,15 @@ def home():
     return {"status": "API is running 🚀"}
 
 # ✅ Chat endpoint
+conversation_store = {}
+
 @app.post("/chat")
-async def chat(request: Request):
+async def chat(data: ChatRequest):
     try:
-        body = await request.json()
-        messages = body.get("messages", [])
+        user_id = "default_user"  # later login system me dynamic hoga
+        
+        if user_id not in conversation_store:
+            conversation_store[user_id] = []
 
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
@@ -50,20 +55,31 @@ async def chat(request: Request):
 
         client = Groq(api_key=api_key)
 
+        # Add new user messages to memory
+        conversation_store[user_id].extend(data.messages)
+
+        # 🔥 Smart memory control (last 10 messages only)
+        recent_messages = conversation_store[user_id][-10:]
+
         all_messages = [
             {
                 "role": "system",
                 "content": "You are an AI Product Expert."
             }
-        ] + messages
+        ] + [msg.dict() for msg in recent_messages]
 
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=all_messages
-)
-
+        )
 
         reply = response.choices[0].message.content
+
+        # Save assistant reply to memory
+        conversation_store[user_id].append({
+            "role": "assistant",
+            "content": reply
+        })
 
         return {"reply": reply}
 
