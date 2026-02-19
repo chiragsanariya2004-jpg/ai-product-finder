@@ -187,13 +187,27 @@ button:hover {
 
 <body>
 
-<header>🤖 AI Product Expert</header>
+<header>
+    🤖 AI Product Expert
+    <button onclick="clearChat()" style="
+        margin-left:20px;
+        padding:6px 12px;
+        border:none;
+        border-radius:8px;
+        background:#ef4444;
+        color:white;
+        cursor:pointer;
+    ">
+        Clear Chat
+    </button>
+</header>
+
 
 <div id="messages"></div>
 
 <div class="input-area">
     <input type="text" id="userInput" placeholder="Ask about any product..." />
-    <button onclick="sendMessage()">Send</button>
+    <button id="sendBtn" onclick="sendMessage()">Send</button>
 </div>
 
 <script>
@@ -232,12 +246,21 @@ async function sendMessage() {
     if (!message) return;
 
     const messagesDiv = document.getElementById("messages");
+    const sendBtn = document.getElementById("sendBtn");
+    sendBtn.disabled = true;
+    sendBtn.innerText = "Sending...";
 
     // Show user message
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
     userMsg.innerText = message;
     messagesDiv.appendChild(userMsg);
+
+    function clearChat() {
+    localStorage.removeItem("chatHistory");
+    location.reload();
+}
+
 
     // Save to history
     chatHistory.push({
@@ -307,11 +330,16 @@ function typeEffect() {
 }
 
 typeEffect();
+sendBtn.disabled = false;
+sendBtn.innerText = "Send";
   
 
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
     } catch (error) {
+        sendBtn.disabled = false;
+        sendBtn.innerText = "Send";
+
         loadingMsg.remove();
 
         const errorMsg = document.createElement("div");
