@@ -256,10 +256,6 @@ async function sendMessage() {
     userMsg.innerText = message;
     messagesDiv.appendChild(userMsg);
 
-    function clearChat() {
-    localStorage.removeItem("chatHistory");
-    location.reload();
-}
 
 
     // Save to history
@@ -347,6 +343,11 @@ sendBtn.innerText = "Send";
         errorMsg.innerText = "Server Error. Try again.";
         messagesDiv.appendChild(errorMsg);
     }
+}
+ 
+function clearChat() {
+    localStorage.removeItem("chatHistory");
+    location.reload();
 }
 
 // Enter key support
