@@ -31,6 +31,7 @@ class Message(BaseModel):
 
 # ✅ Request model (list of messages)
 class ChatRequest(BaseModel):
+    user_id: str
     messages: List[Message]
 
 # ✅ Health check
@@ -44,7 +45,7 @@ conversation_store = {}
 @app.post("/chat")
 async def chat(data: ChatRequest):
     try:
-        user_id = "default_user"  # later login system me dynamic hoga
+        user_id = data.user_id  # later login system me dynamic hoga
         
         if user_id not in conversation_store:
             conversation_store[user_id] = []
@@ -90,3 +91,11 @@ async def chat(data: ChatRequest):
         print("ERROR:", str(e))
         return {"error": str(e)}
     
+@app.post("/clear")
+async def clear_chat(data: dict = Body(...)):
+    user_id = data.get("user_id")
+
+    if user_id in conversation_store:
+        conversation_store[user_id] = []
+
+    return {"status": "cleared"}

@@ -214,6 +214,13 @@ button:hover {
 
 let chatHistory = [];
 
+let userId = localStorage.getItem("userId");
+
+if (!userId) {
+    userId = crypto.randomUUID();
+    localStorage.setItem("userId", userId);
+}
+
 // Load chat from localStorage on page load
 window.onload = function() {
     const savedChat = localStorage.getItem("chatHistory");
@@ -284,10 +291,11 @@ async function sendMessage() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-    messages: [
-        { role: "user", content: message }
-    ]
-})
+                user_id: userId,
+                messages: [
+                    { role: "user", content: message }
+                ]
+            })
         });
 
         if (!response.ok) {
@@ -344,12 +352,22 @@ sendBtn.innerText = "Send";
 
         const errorMsg = document.createElement("div");
         errorMsg.className = "message bot";
-        errorMsg.innerText = "Server Error. Try again.";
+        errorMsg.innerText = error.message || "Server Error";
         messagesDiv.appendChild(errorMsg);
     }
 }
  
-function clearChat() {
+async function clearChat() {
+    await fetch("https://ai-product-finder.onrender.com/clear", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            user_id: userId
+        })
+    });
+
     localStorage.removeItem("chatHistory");
     location.reload();
 }
