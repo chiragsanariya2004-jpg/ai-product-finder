@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Product Expert</title>
+    <title>AI Smartphone Advisor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -25,6 +25,9 @@ header {
     font-size: 18px;
     border-bottom: 1px solid rgba(255,255,255,0.08);
     letter-spacing: 0.5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* CHAT AREA */
@@ -188,7 +191,11 @@ button:hover {
 <body>
 
 <header>
-    🤖 AI Product Expert
+    📱 AI Smartphone Advisor
+    <p style="font-size:14px; opacity:0.8; margin-top:6px; font-weight:400;">
+        Find your perfect smartphone in seconds. No confusion. No biased reviews.
+    </p>
+
     <button onclick="clearChat()" style="
         margin-left:20px;
         padding:6px 12px;
@@ -206,7 +213,7 @@ button:hover {
 <div id="messages"></div>
 
 <div class="input-area">
-    <input type="text" id="userInput" placeholder="Ask about any product..." />
+    <input type="text" id="userInput" placeholder="Enter your budget and needs (e.g. 20000 gaming phone)..." />
     <button id="sendBtn" onclick="sendMessage()">Send</button>
 </div>
 
