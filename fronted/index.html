@@ -43,7 +43,7 @@ header {
 
 /* MESSAGE BASE */
 .message {
-    max-width: 80%;
+    max-width: 90%;
     padding: 18px;
     border-radius: 18px;
     line-height: 1.7;
@@ -116,7 +116,7 @@ header {
 /* INPUT AREA */
 .input-area {
     display: flex;
-    padding: 15px;
+    padding: 10px;
     background: rgba(255,255,255,0.05);
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255,255,255,0.08);
@@ -129,7 +129,7 @@ input {
     border: 1px solid rgba(255,255,255,0.1);
     background: rgba(0,0,0,0.4);
     color: white;
-    font-size: 15px;
+    font-size: 14px;
     outline: none;
 }
 
@@ -145,7 +145,7 @@ input:focus {
 /* BUTTON */
 button {
     margin-left: 10px;
-    padding: 14px 20px;
+    padding: 12px 16px;
     border: none;
     border-radius: 14px;
     background: linear-gradient(135deg, #6366f1, #7c3aed);
@@ -181,6 +181,31 @@ button:hover {
 #messages::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,0.2);
     border-radius: 10px;
+}
+
+/* MOBILE RESPONSIVE FIX */
+@media (max-width: 600px) {
+
+    header {
+        padding: 25px 15px;
+    }
+
+    header h1 {
+        font-size: 22px;
+    }
+
+    header div {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    header a {
+        width: 90%;
+        text-align: center;
+    }
+
 }
 
     </style>
