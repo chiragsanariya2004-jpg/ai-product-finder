@@ -191,10 +191,42 @@ button:hover {
 <body>
 
 <header>
-    📱 AI Smartphone Advisor
-    <p style="font-size:14px; opacity:0.8; margin-top:6px; font-weight:400;">
+    <h1 style="margin:0;">📱 AI Smartphone Advisor</h1>
+
+    <p style="font-size:15px; opacity:0.9; margin-top:8px;">
         Find your perfect smartphone in seconds. No confusion. No biased reviews.
     </p>
+
+    <div style="margin-top:15px;">
+        <a href="best-phone-under-15000.html" style="
+            padding:8px 14px;
+            background:#4f46e5;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            margin-right:8px;
+            font-size:14px;
+        ">Best Phone Under 15000</a>
+
+        <a href="best-gaming-phone-under-20000.html" style="
+            padding:8px 14px;
+            background:#7c3aed;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            margin-right:8px;
+            font-size:14px;
+        ">Best Gaming Phone</a>
+
+        <a href="best-camera-phone-under-30000.html" style="
+            padding:8px 14px;
+            background:#9333ea;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            font-size:14px;
+        ">Best Camera Phone</a>
+    </div>
 
     <button onclick="clearChat()" style="
         margin-left:20px;
@@ -211,6 +243,13 @@ button:hover {
 
 
 <div id="messages"></div>
+
+<div style="text-align:center; margin-bottom:10px; font-size:14px; opacity:0.8;">
+    Try:
+    <span style="color:#a78bfa;">15000 gaming phone</span> |
+    <span style="color:#a78bfa;">Best camera phone under 20000</span> |
+    <span style="color:#a78bfa;">5G phone with good battery</span>
+</div>
 
 <div class="input-area">
     <input type="text" id="userInput" placeholder="Enter your budget and needs (e.g. 20000 gaming phone)..." />
@@ -388,27 +427,25 @@ document.getElementById("userInput").addEventListener("keypress", function(event
 
 </script>
 
-<footer style="text-align:center; padding:20px; font-size:13px; opacity:0.8;">
+<footer style="
+    margin-top:40px;
+    padding:20px;
+    text-align:center;
+    background:rgba(255,255,255,0.05);
+    font-size:14px;
+">
 
     <div style="margin-bottom:10px;">
-
-        <a href="best-phone-under-15000.html" style="color:#a78bfa; margin:0 10px;">
-            Best Phone Under 15000
-        </a>
-
-        <a href="best-gaming-phone-under-20000.html" style="color:#a78bfa; margin:0 10px;">
-            Best Gaming Phone Under 20000
-        </a>
-
-        <a href="best-camera-phone-under-30000.html" style="color:#a78bfa; margin:0 10px;">
-            Best Camera Phone Under 30000
-        </a>
-
+        <strong>Explore:</strong><br>
+        <a href="best-phone-under-15000.html">Best Phone Under 15000</a> |
+        <a href="best-gaming-phone-under-20000.html">Best Gaming Phone Under 20000</a> |
+        <a href="best-camera-phone-under-30000.html">Best Camera Phone Under 30000</a>
     </div>
 
     <div>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
+        <strong>Legal:</strong><br>
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="terms.html">Terms & Conditions</a> |
         <a href="disclaimer.html">Disclaimer</a>
     </div>
 
