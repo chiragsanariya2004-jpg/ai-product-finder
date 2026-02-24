@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Smartphone Advisor</title>
+    <title>Best Smartphone Finder AI – Find Best Phone Under Your Budget</title>
+
+    <meta name="description" content="Find the best smartphone under your budget using AI. Get recommendations for gaming, camera, battery and 5G phones instantly.">
+
+    <meta name="keywords" content="best phone under 15000, best gaming phone under 20000, best camera phone, 5G phone under budget">
+
+    <meta name="author" content="Your Brand Name">
+
+    <meta name="robots" content="index, follow">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" type="image/png" href="logo.png">
 
     <style>
        body {
@@ -235,17 +246,23 @@ footer a:hover {
 <body>
 
 <header>
-    AI Smartphone Advisor
+    <h1>AI Smartphone Advisor</h1>
+    <p style="font-size:14px; opacity:0.8;">
+        Find the best phone under your budget instantly 🚀
+    </p>
+    <button onclick="clearChat()" style="margin-top:10px; background:#ef4444;">
+    Clear Chat
+</button>
 </header>
 
 
 <div id="messages"></div>
 
-<div style="text-align:center; margin:6px 0; font-size:12px; opacity:0.5;">
+<div style="text-align:center; margin-bottom:10px; font-size:14px; opacity:0.8;">
     Try:
-    <span style="color:#a78bfa;">15000 gaming phone</span> |
-    <span style="color:#a78bfa;">Best camera phone under 20000</span> |
-    <span style="color:#a78bfa;">5G phone with good battery</span>
+    <span onclick="quickMsg('15000 gaming phone')" style="color:#a78bfa; cursor:pointer;">15000 gaming phone</span> |
+    <span onclick="quickMsg('Best camera phone under 20000')" style="color:#a78bfa; cursor:pointer;">Best camera phone under 20000</span> |
+    <span onclick="quickMsg('5G phone with good battery')" style="color:#a78bfa; cursor:pointer;">5G phone with good battery</span>
 </div>
 
 <div class="input-area">
@@ -376,7 +393,7 @@ function typeEffect() {
         currentText += fullText[index];
         botMsg.innerHTML = marked.parse(currentText);
         index++;
-        setTimeout(typeEffect, 10); // speed control (lower = faster)
+        setTimeout(typeEffect, 5); // speed control (lower = faster)
     }
 }
 
@@ -413,6 +430,11 @@ async function clearChat() {
 
     localStorage.removeItem("chatHistory");
     location.reload();
+}
+
+function quickMsg(text) {
+    document.getElementById("userInput").value = text;
+    sendMessage();
 }
 
 // Enter key support
