@@ -418,18 +418,33 @@ sendBtn.innerText = "Send";
 }
  
 async function clearChat() {
-    await fetch("https://ai-product-finder.onrender.com/clear", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            user_id: userId
-        })
-    });
+    try {
+        const response = await fetch("https://ai-product-finder.onrender.com/clear", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: userId
+            })
+        });
 
-    localStorage.removeItem("chatHistory");
-    location.reload();
+        if (!response.ok) {
+            throw new Error("Failed to clear server memory");
+        }
+
+        // Clear frontend memory
+        localStorage.removeItem("chatHistory");
+
+        // Clear UI instantly (without reload)
+        document.getElementById("messages").innerHTML = "";
+
+        alert("Chat cleared successfully ✅");
+
+    } catch (error) {
+        console.error(error);
+        alert("Error clearing chat ❌");
+    }
 }
 
 function quickMsg(text) {
