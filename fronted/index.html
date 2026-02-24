@@ -8,8 +8,8 @@
        body {
     margin: 0;
     font-family: "Inter", Arial, sans-serif;
-    background: #f9fafb;
-    color: #111827;
+    background: #0b0f19;
+    color: #f1f5f9;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -17,8 +17,8 @@
 
 /* HEADER */
 header {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(10px);
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
     padding: 18px;
     text-align: center;
     font-weight: 600;
@@ -28,13 +28,14 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    color: #ffffff;
 }
 
 /* CHAT AREA */
 #messages {
     flex: 1;
     overflow-y: auto;
-    padding: 24px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -45,7 +46,7 @@ header {
 .message {
     max-width: 90%;
     padding: 18px;
-    border-radius: 18px;
+    border-radius: 16px;
     line-height: 1.7;
     font-size: 15px;
     word-wrap: break-word;
@@ -69,10 +70,11 @@ header {
 /* BOT MESSAGE */
 .bot {
     align-self: flex-start;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    color: #111827;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #f1f5f9;
     border-bottom-left-radius: 6px;
+    backdrop-filter: blur(10px);
 }
 
 /* Markdown Styling */
@@ -91,7 +93,7 @@ header {
 .bot h3 {
     font-size: 15px;
     margin: 8px 0 4px;
-    color: #c4b5fd;
+    color: #a78bfa;
 }
 
 .bot p {
@@ -116,17 +118,18 @@ header {
 .input-area {
     display: flex;
     padding: 10px;
-    background: #ffffff;
-    border-top: 1px solid #e5e7eb;
+    background: rgba(15,23,42,0.9);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
 }
 
 input {
     flex: 1;
     padding: 14px;
     border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(0,0,0,0.4);
-    color: white;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.05);
+    color: #ffffff;
     font-size: 14px;
     outline: none;
 }
@@ -206,6 +209,24 @@ button:hover {
 
 }
 
+footer {
+    margin-top: 0;
+    padding: 14px 10px;
+    text-align: center;
+    background: rgba(15,23,42,0.9);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+}
+
+footer a {
+    color: #a78bfa;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -213,22 +234,14 @@ button:hover {
 
 <body>
 
-<header style="
-    padding:16px;
-    text-align:center;
-    font-weight:600;
-    font-size:18px;
-    border-bottom:1px solid #e5e7eb;
-    background:#ffffff;
-    color:#111827;
-">
+<header>
     AI Smartphone Advisor
 </header>
 
 
 <div id="messages"></div>
 
-<div style="text-align:center; margin-bottom:10px; font-size:14px; opacity:0.8;">
+<div style="text-align:center; margin:6px 0; font-size:12px; opacity:0.5;">
     Try:
     <span style="color:#a78bfa;">15000 gaming phone</span> |
     <span style="color:#a78bfa;">Best camera phone under 20000</span> |
@@ -411,29 +424,7 @@ document.getElementById("userInput").addEventListener("keypress", function(event
 
 </script>
 
-<footer style="
-    margin-top:40px;
-    padding:20px;
-    text-align:center;
-    background:rgba(255,255,255,0.05);
-    font-size:14px;
-">
 
-    <div style="margin-bottom:10px;">
-        <strong>Explore:</strong><br>
-        <a href="best-phone-under-15000.html">Best Phone Under 15000</a> |
-        <a href="best-gaming-phone-under-20000.html">Best Gaming Phone Under 20000</a> |
-        <a href="best-camera-phone-under-30000.html">Best Camera Phone Under 30000</a>
-    </div>
-
-    <div>
-        <strong>Legal:</strong><br>
-        <a href="privacy.html">Privacy Policy</a> |
-        <a href="terms.html">Terms & Conditions</a> |
-        <a href="disclaimer.html">Disclaimer</a>
-    </div>
-
-</footer>
 
 </body>
 </html>
