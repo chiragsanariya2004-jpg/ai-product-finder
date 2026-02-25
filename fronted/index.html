@@ -21,9 +21,7 @@
     font-family: "Inter", Arial, sans-serif;
     background: #0b0f19;
     color: #f1f5f9;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+
 }
 
 /* HEADER */
@@ -254,7 +252,7 @@ footer a:hover {
 #chatSection {
     display: flex;
     flex-direction: column;
-    height: 100vh;   /* 👈 IMPORTANT */
+    height: 100vh;
 }
 
 #hero h1 {
@@ -512,8 +510,12 @@ async function clearChat() {
         alert("Error clearing chat ❌");
     }
 
-    document.getElementById("hero").style.display = "flex";
-    document.getElementById("chatSection").style.display = "none";
+    const hero = document.getElementById("hero");
+    const chatSection = document.getElementById("chatSection");
+
+    chatSection.style.display = "none";
+    hero.style.display = "flex";
+    hero.style.opacity = "1";
 }
 
 function quickMsg(text) {
