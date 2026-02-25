@@ -23,7 +23,7 @@
     color: #f1f5f9;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 /* HEADER */
@@ -238,6 +238,54 @@ footer a:hover {
     text-decoration: underline;
 }
 
+/* HERO SECTION */
+#hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+    background: radial-gradient(circle at top, #1e293b, #0b0f19);
+}
+
+#chatSection {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;   /* 👈 IMPORTANT */
+}
+
+#hero h1 {
+    font-size: 38px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+#hero p {
+    max-width: 600px;
+    font-size: 16px;
+    opacity: 0.8;
+    margin-bottom: 30px;
+}
+
+.hero-btn {
+    padding: 16px 28px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #7c3aed, #2563eb);
+    color: white;
+    transition: 0.3s ease;
+}
+
+.hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(124,58,237,0.4);
+}
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -245,27 +293,39 @@ footer a:hover {
 
 <body>
 
-<header>
-  <h1>Find Your Perfect Smartphone in Seconds</h1>
-  <p>AI-powered recommendations based on your budget & needs</p>
-  <button onclick="document.getElementById('userInput').focus()">
-    Find My Perfect Phone
-  </button>
-</header>>
+<section id="hero">
+    <h1>Find Your Perfect Smartphone in Seconds</h1>
+    <p>
+        AI-powered recommendations based on your budget, gaming, camera & battery needs.
+    </p>
+
+    <button onclick="startChat()" class="hero-btn">
+        🔍 Find My Perfect Phone
+    </button>
+</section>
 
 
-<div id="messages"></div>
+<div id="chatSection" style="display:none;">
+    <header>
+        <h1>AI Smartphone Advisor</h1>
+        <button onclick="clearChat()" style="margin-top:10px; background:#ef4444;">
+            Clear Chat
+        </button>
+    </header>
 
-<div style="text-align:center; margin-bottom:10px; font-size:14px; opacity:0.8;">
-    Try:
-    <span onclick="quickMsg('15000 gaming phone')" style="color:#a78bfa; cursor:pointer;">15000 gaming phone</span> |
-    <span onclick="quickMsg('Best camera phone under 20000')" style="color:#a78bfa; cursor:pointer;">Best camera phone under 20000</span> |
-    <span onclick="quickMsg('5G phone with good battery')" style="color:#a78bfa; cursor:pointer;">5G phone with good battery</span>
-</div>
+    <div id="messages"></div>
 
-<div class="input-area">
-    <input type="text" id="userInput" placeholder="Enter your budget and needs (e.g. 20000 gaming phone)..." />
-    <button id="sendBtn" onclick="sendMessage()">Send</button>
+    <div style="text-align:center; margin-bottom:10px; font-size:14px; opacity:0.8;">
+        Try:
+        <span onclick="quickMsg('15000 gaming phone')" style="color:#a78bfa; cursor:pointer;">15000 gaming phone</span> |
+        <span onclick="quickMsg('Best camera phone under 20000')" style="color:#a78bfa; cursor:pointer;">Best camera phone under 20000</span> |
+        <span onclick="quickMsg('5G phone with good battery')" style="color:#a78bfa; cursor:pointer;">5G phone with good battery</span>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Enter your budget and needs..." />
+        <button id="sendBtn" onclick="sendMessage()">Send</button>
+    </div>
 </div>
 
 <script>
@@ -303,6 +363,10 @@ window.onload = function() {
 
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
+    if (chatHistory.length > 0) {
+    document.getElementById("hero").style.display = "none";
+    document.getElementById("chatSection").style.display = "block";
+}
 };
 
 async function sendMessage() {
@@ -391,7 +455,10 @@ function typeEffect() {
         currentText += fullText[index];
         botMsg.innerHTML = marked.parse(currentText);
         index++;
-        setTimeout(typeEffect, 5); // speed control (lower = faster)
+
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // 👈 ADD THIS
+
+        setTimeout(typeEffect, 5);
     }
 }
 
@@ -433,6 +500,7 @@ async function clearChat() {
 
         // Clear frontend memory
         localStorage.removeItem("chatHistory");
+        chatHistory = [];
 
         // Clear UI instantly (without reload)
         document.getElementById("messages").innerHTML = "";
@@ -443,6 +511,9 @@ async function clearChat() {
         console.error(error);
         alert("Error clearing chat ❌");
     }
+
+    document.getElementById("hero").style.display = "flex";
+    document.getElementById("chatSection").style.display = "none";
 }
 
 function quickMsg(text) {
@@ -456,6 +527,14 @@ document.getElementById("userInput").addEventListener("keypress", function(event
         sendMessage();
     }
 });
+
+function startChat() {
+    document.getElementById("hero").style.opacity = "0";
+setTimeout(() => {
+    document.getElementById("hero").style.display = "none";
+    document.getElementById("chatSection").style.display = "block";
+}, 300);
+}
 
 </script>
 
