@@ -332,6 +332,34 @@ footer a:hover {
 
 let chatHistory = [];
 
+function renderChat() {
+    const messagesDiv = document.getElementById("messages");
+    messagesDiv.innerHTML = "";
+
+    chatHistory.forEach((msg, index) => {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = "message " + (msg.role === "user" ? "user" : "bot");
+
+        if (msg.role === "assistant") {
+            msgDiv.innerHTML = marked.parse(msg.content);
+        } else {
+            msgDiv.innerText = msg.content;
+        }
+
+        // delete button
+        const delBtn = document.createElement("span");
+        delBtn.innerText = " ❌";
+        delBtn.style.cursor = "pointer";
+        delBtn.style.marginLeft = "10px";
+        delBtn.onclick = () => deleteMessage(index);
+
+        msgDiv.appendChild(delBtn);
+        messagesDiv.appendChild(msgDiv);
+    });
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
 let userId = localStorage.getItem("userId");
 
 if (!userId) {
@@ -344,30 +372,19 @@ window.onload = function() {
     const savedChat = localStorage.getItem("chatHistory");
 
     if (savedChat) {
-        chatHistory = JSON.parse(savedChat);
-
-        const messagesDiv = document.getElementById("messages");
-
-        chatHistory.forEach(msg => {
-            const msgDiv = document.createElement("div");
-            msgDiv.className = "message " + (msg.role === "user" ? "user" : "bot");
-
-            if (msg.role === "assistant") {
-                msgDiv.innerHTML = marked.parse(msg.content);
-            } else {
-                msgDiv.innerText = msg.content;
-            }
-
-            messagesDiv.appendChild(msgDiv);
-        });
-
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    chatHistory = JSON.parse(savedChat);
+    renderChat();
     }
+    
+    
     if (chatHistory.length > 0) {
     document.getElementById("hero").style.display = "none";
     document.getElementById("chatSection").style.display = "block";
+    }
+        const messagesDiv = document.getElementById("messages");
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
-};
+
 
 async function sendMessage() {
     const input = document.getElementById("userInput");
@@ -394,7 +411,7 @@ async function sendMessage() {
     });
 
     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
-
+    renderChat();
 
     input.value = "";
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -434,38 +451,18 @@ async function sendMessage() {
 
         loadingMsg.remove();
 
-        // Save bot reply
+
         chatHistory.push({
-            role: "assistant",
-            content: data.reply
-        });
+    role: "assistant",
+    content: data.reply
+});
 
-        localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+renderChat();
 
-        const botMsg = document.createElement("div");
-botMsg.className = "message bot";
-messagesDiv.appendChild(botMsg);
-
-const fullText = data.reply || "Something went wrong.";
-let currentText = "";
-let index = 0;
-
-function typeEffect() {
-    if (index < fullText.length) {
-        currentText += fullText[index];
-        botMsg.innerHTML = marked.parse(currentText);
-        index++;
-
-        messagesDiv.scrollTop = messagesDiv.scrollHeight; // 👈 ADD THIS
-
-        setTimeout(typeEffect, 5);
-    }
-}
-
-typeEffect();
 sendBtn.disabled = false;
 sendBtn.innerText = "Send";
-  
+
 
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
@@ -538,6 +535,12 @@ setTimeout(() => {
     document.getElementById("hero").style.display = "none";
     document.getElementById("chatSection").style.display = "block";
 }, 300);
+}
+
+function deleteMessage(index) {
+    chatHistory.splice(index, 1);
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+    renderChat();
 }
 
 </script>
