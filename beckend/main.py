@@ -83,6 +83,7 @@ Rules:
 4. Keep response clean, structured and easy to read.
 5. Use headings and bullet points.
 6. Mention:
+   - Mention Price (₹) clearly under phone name
    - Processor
    - Display
    - Camera
@@ -92,6 +93,7 @@ Rules:
 8. If request is vague → ask 1-2 smart follow-up questions.
 9. After giving recommendations, ask 1 smart follow-up question to refine results.
 10. If multiple good options exist, offer a quick comparison table.
+11. Always mention approximate current price in INR for each phone.
 
 Tone:
 - Confident
@@ -125,6 +127,9 @@ End every response with:
             "content": reply
         })
 
+    # Trim memory to last 20 messages only
+        conversation_store[user_id] = conversation_store[user_id][-20:]
+        
         return {"reply": reply}
 
     except Exception as e:
