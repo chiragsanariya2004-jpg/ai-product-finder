@@ -56,9 +56,9 @@ async def chat(data: ChatRequest):
 
         client = Groq(api_key=api_key)
 
-        # Add new user messages to memory
-        new_message = data.messages[0].dict()
-        conversation_store[user_id].append(new_message)
+        # Add all new user messages to memory
+        for msg in data.messages:
+            conversation_store[user_id].append(msg.dict())
 
 
 
@@ -90,6 +90,8 @@ Rules:
    - Why it's good for the user
 7. If budget not mentioned → ask clarifying question first.
 8. If request is vague → ask 1-2 smart follow-up questions.
+9. After giving recommendations, ask 1 smart follow-up question to refine results.
+10. If multiple good options exist, offer a quick comparison table.
 
 Tone:
 - Confident
@@ -97,6 +99,12 @@ Tone:
 - Straight to the point
 - No fluff
 - Slight premium tech-advisor vibe
+
+Format:
+- Short intro (1 line)
+- 3 phone recommendations
+- Clear category tag (Best Overall / Best Gaming / Best Camera)
+- End with follow-up question
 
 End every response with:
 “Want comparison between these options?”
