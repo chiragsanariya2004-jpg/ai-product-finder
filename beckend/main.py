@@ -139,7 +139,7 @@ End every response with:
     })
 
         # 🔥 Extract phone names from AI reply
-        phones = re.findall(r"## (.+)", reply)
+        phones = re.findall(r"#+\s(.+)", reply)
 
         affiliate_section = "\n\n---\n"
 
