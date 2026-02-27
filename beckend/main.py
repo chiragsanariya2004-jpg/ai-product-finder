@@ -106,7 +106,7 @@ Rules:
 9. After giving recommendations, ask 1 smart follow-up question to refine results.
 10. If multiple good options exist, offer a quick comparison table.
 11. Always mention approximate current price in INR for each phone.
-
+12. The first recommendation should be the strongest overall pick.
 Tone:
 - Confident
 - Helpful
@@ -141,12 +141,20 @@ End every response with:
         # 🔥 Extract phone names from AI reply
         phones = re.findall(r"## (.+)", reply)
 
-        affiliate_section = "\n\n---\n### 🔗 Buy These Phones:\n\n"
+        affiliate_section = "\n\n---\n"
 
-        for phone in phones:
+        for index, phone in enumerate(phones):
             query = urllib.parse.quote(phone)
             link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
-            affiliate_section += f"👉 [{phone} on Amazon]({link})\n\n"
+
+            # First phone highlight (Best Pick psychology)
+            badge = " ⭐ Best Pick" if index == 0 else ""
+
+            affiliate_section += f"""
+            <a href="{link}" target="_blank" rel="nofollow sponsored noopener noreferrer" class="amazon-btn">
+            🔥 Check Latest Price for {phone}{badge}
+            </a>
+            """
 
         reply = reply + affiliate_section
 

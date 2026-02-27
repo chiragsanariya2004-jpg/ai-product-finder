@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Best Smartphone Finder AI – Find Best Phone Under Your Budget(2026)</title>
+    <title>Best Phone Under Budget (2026) – AI Smartphone Finder</title>
 
     <meta name="description" content="Find the best smartphone under your budget using AI. Get recommendations for gaming, camera, battery and 5G phones instantly.">
 
@@ -294,9 +294,36 @@ footer a:hover {
     box-shadow: 0 10px 30px rgba(124,58,237,0.4);
 }
 
+.amazon-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #ff9900, #ffb84d);
+  color: #111;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(255,153,0,0.4);
+  transition: 0.2s ease;
+}
+
+.amazon-btn:hover {
+  background: #e68a00;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .amazon-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+}
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 </head>
 
 <body>
@@ -319,6 +346,17 @@ footer a:hover {
         <button onclick="clearChat()" style="margin-top:10px; background:#ef4444;">
             Clear Chat
         </button>
+        <div style="
+    background: linear-gradient(135deg, #ff9900, #ffb84d);
+    color: #111;
+    font-weight: 700;
+    padding: 8px;
+    border-radius: 8px;
+    margin-top: 10px;
+    text-align: center;
+">
+    🔥 Today's Top Pick – Limited Time Deal
+</div>
     </header>
 
     <div id="messages">
@@ -350,7 +388,7 @@ function renderChat() {
         msgDiv.className = "message " + (msg.role === "user" ? "user" : "bot");
 
         if (msg.role === "assistant") {
-            msgDiv.innerHTML = marked.parse(msg.content);
+            msgDiv.innerHTML = DOMPurify.sanitize(marked.parse(msg.content));
         } else {
             msgDiv.innerText = msg.content;
         }
