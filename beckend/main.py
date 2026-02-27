@@ -121,7 +121,7 @@ End every response with:
 ] + recent_messages
 
         response = client.chat.completions.create(
-            model="llama-3.1-mini",
+            model="llama-3.1-8b-instant",
             messages=all_messages
         )
 
