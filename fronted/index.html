@@ -45,9 +45,10 @@ header {
     flex: 1;
     overflow-y: auto;
     padding: 18px;
+    padding-bottom: 100px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;   /* 🔥 ADD THIS */
+
     gap: 18px;
     scroll-behavior: smooth;
 }
@@ -124,14 +125,7 @@ header {
     color: #a78bfa;
 }
 
-/* INPUT AREA */
-.input-area {
-    display: flex;
-    padding: 10px;
-    background: rgba(15,23,42,0.9);
-    border-top: 1px solid rgba(255,255,255,0.08);
-    backdrop-filter: blur(15px);
-}
+
 
 input {
     flex: 1;
@@ -256,14 +250,19 @@ footer a:hover {
     height: 100vh;
 }
 
-#messages {
-    flex: 1;
-    overflow-y: auto;
-}
+
 
 .input-area {
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    padding: 10px;
+    background: rgba(15,23,42,0.95);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    z-index: 100;
 }
 
 #hero h1 {
@@ -356,14 +355,22 @@ function renderChat() {
             msgDiv.innerText = msg.content;
         }
 
-        // delete button
-        const delBtn = document.createElement("span");
-        delBtn.innerText = " ❌";
-        delBtn.style.cursor = "pointer";
-        delBtn.style.marginLeft = "10px";
-        delBtn.onclick = () => deleteMessage(index);
+        // create delete button
+const delBtn = document.createElement("span");
+delBtn.innerHTML = " 🗑️";
+delBtn.style.cursor = "pointer";
+delBtn.style.marginLeft = "8px";
+delBtn.style.fontSize = "14px";
 
-        msgDiv.appendChild(delBtn);
+delBtn.onclick = () => {
+    const confirmDelete = confirm("Are you sure you want to delete this message?");
+    if (confirmDelete) {
+        deleteMessage(index);
+    }
+};
+        if (msg.role === "user") {
+    msgDiv.appendChild(delBtn);
+}
         messagesDiv.appendChild(msgDiv);
     });
 
@@ -406,11 +413,7 @@ async function sendMessage() {
     sendBtn.disabled = true;
     sendBtn.innerText = "Sending...";
 
-    // Show user message
-    const userMsg = document.createElement("div");
-    userMsg.className = "message user";
-    userMsg.innerText = message;
-    messagesDiv.appendChild(userMsg);
+
 
 
 

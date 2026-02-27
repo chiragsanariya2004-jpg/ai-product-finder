@@ -42,6 +42,13 @@ def home():
 # ✅ Chat endpoint
 conversation_store = {}
 
+api_key = os.getenv("GROQ_API_KEY")
+
+if not api_key:
+    raise ValueError("GROQ API key not found")
+
+client = Groq(api_key=api_key)
+
 @app.post("/chat")
 async def chat(data: ChatRequest):
     try:
@@ -50,11 +57,10 @@ async def chat(data: ChatRequest):
         if user_id not in conversation_store:
             conversation_store[user_id] = []
 
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            return {"error": "GROQ API key not found"}
 
-        client = Groq(api_key=api_key)
+
+
+
 
         # Add all new user messages to memory
         for msg in data.messages:
