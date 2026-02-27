@@ -1,5 +1,6 @@
 import os
 import urllib.parse
+import re
 from typing import List
 from fastapi import FastAPI
 from fastapi import Request
@@ -137,17 +138,17 @@ End every response with:
         "content": response.choices[0].message.content
     })
 
-        last_user_message = data.messages[-1].content
-        query = urllib.parse.quote(last_user_message)
-        affiliate_link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
+        # 🔥 Extract phone names from AI reply
+        phones = re.findall(r"## (.+)", reply)
 
-        affiliate_note = f"""
-        ---
-        🔗 **Buy on Amazon:**
-        👉 [Buy on Amazon]({affiliate_link})
-        """
+        affiliate_section = "\n\n---\n### 🔗 Buy These Phones:\n\n"
 
-        reply = reply + affiliate_note
+        for phone in phones:
+            query = urllib.parse.quote(phone)
+            link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
+            affiliate_section += f"👉 [{phone} on Amazon]({link})\n\n"
+
+        reply = reply + affiliate_section
 
 
 
