@@ -1,4 +1,5 @@
 import os
+import urllib.parse
 from typing import List
 from fastapi import FastAPI
 from fastapi import Request
@@ -9,6 +10,10 @@ from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
+
+AFFILIATE_TAG = os.getenv("AFFILIATE_TAG")
+if not AFFILIATE_TAG:
+    raise ValueError("Affiliate tag not found")
 
 app = FastAPI(title="AI Product Expert API")
 
@@ -126,6 +131,18 @@ End every response with:
         )
 
         reply = response.choices[0].message.content
+
+        last_user_message = data.messages[-1].content
+        query = urllib.parse.quote(last_user_message)
+        affiliate_link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
+
+        affiliate_note = f"""
+        ---
+        🔗 **Buy on Amazon:**
+        👉 [Buy on Amazon]({affiliate_link})
+        """
+
+        reply = reply + affiliate_note
 
         # Save assistant reply to memory
         conversation_store[user_id].append({
