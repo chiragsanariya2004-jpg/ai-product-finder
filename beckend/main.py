@@ -132,6 +132,11 @@ End every response with:
 
         reply = response.choices[0].message.content
 
+        conversation_store[user_id].append({
+        "role": "assistant",
+        "content": response.choices[0].message.content
+    })
+
         last_user_message = data.messages[-1].content
         query = urllib.parse.quote(last_user_message)
         affiliate_link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
@@ -144,11 +149,7 @@ End every response with:
 
         reply = reply + affiliate_note
 
-        # Save assistant reply to memory
-        conversation_store[user_id].append({
-            "role": "assistant",
-            "content": reply
-        })
+
 
     # Trim memory to last 20 messages only
         conversation_store[user_id] = conversation_store[user_id][-20:]
