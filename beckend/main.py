@@ -160,7 +160,7 @@ Do not repeat the follow-up question after PHONE_LIST.
        # 🔥 Extract structured PHONE_LIST
         phones = []
 
-        phone_section = re.search(r"PHONE_LIST:\s*(.*)", reply, re.DOTALL)
+        phone_section = re.search(r"PHONE_LIST:\s*(.+)", reply, re.DOTALL)
 
         if phone_section:
             lines = phone_section.group(1).strip().split("\n")
@@ -197,7 +197,7 @@ Do not repeat the follow-up question after PHONE_LIST.
 
     # Trim memory to last 20 messages only
         conversation_store[user_id] = conversation_store[user_id][-20:]
-        
+        print("FINAL REPLY:\n", reply)
         return {"reply": reply}
 
     except Exception as e:

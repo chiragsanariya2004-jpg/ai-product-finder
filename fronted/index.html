@@ -400,19 +400,9 @@ function renderChat() {
 
         if (msg.role === "assistant") {
 
-            const rawHtml = marked.parse(msg.content, {
-                breaks: true,
-                gfm: true
+            msgDiv.innerHTML = DOMPurify.sanitize(msg.content, {
+                ADD_ATTR: ['target', 'rel', 'class', 'href'],
             });
-
-            msgDiv.innerHTML = DOMPurify.sanitize(
-                rawHtml,
-                {
-                    ADD_ATTR: ['target', 'rel', 'class', 'href'],
-                    ALLOWED_TAGS: false,   // allow default + html
-                    ALLOWED_ATTR: false
-                }
-            );
         }
 
         // create delete button
@@ -503,11 +493,11 @@ async function sendMessage() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-    user_id: userId,
-    messages: [
-        { role: "user", content: message }
-    ]
-})
+                user_id: userId,
+                messages: [
+                    { role: "user", content: message }
+                ]
+            })
         });
 
         if (!response.ok) {
