@@ -126,8 +126,16 @@ Do NOT wrap anything in ``` .
 Return clean markdown only.
 Never wrap HTML inside code blocks.
 
-End every response with:
-“Want comparison between these options?”
+At the end of your response, return phone names in this exact format:
+
+PHONE_LIST:
+1. Phone Name
+2. Phone Name
+3. Phone Name
+
+PHONE_LIST must be the very last section of the response.
+Do not write anything after PHONE_LIST.
+Do not repeat the follow-up question after PHONE_LIST.
 """
     }
 ] + recent_messages
@@ -149,20 +157,26 @@ End every response with:
             "content": reply
         })
 
-       # 🔥 Extract phone names properly (clean version)
-        phones = re.findall(r"\d+\.\s*([A-Za-z0-9+ ]+)", reply)
+       # 🔥 Extract structured PHONE_LIST
+        phones = []
 
-        cleaned_phones = []
+        phone_section = re.search(r"PHONE_LIST:\s*(.*)", reply, re.DOTALL)
 
-        for phone in phones:
-            phone = re.sub(r"\*+", "", phone)  # remove ** if any
-            phone = re.sub(r"₹.*", "", phone)  # remove price if attached
-            phone = phone.strip()
-            cleaned_phones.append(phone)
+        if phone_section:
+            lines = phone_section.group(1).strip().split("\n")
+    
+            for line in lines:
+                match = re.search(r"\d+\.\s*(.+)", line)
+                if match:
+                    phones.append(match.group(1).strip())
 
-        phones = cleaned_phones  
+        # Remove PHONE_LIST from visible reply
+        reply = re.sub(r"PHONE_LIST:.*", "", reply, flags=re.DOTALL).strip()
 
         affiliate_section = "\n\n---\n"
+
+        if not phones:
+            return {"reply": reply}
 
         for index, phone in enumerate(phones):
             query = urllib.parse.quote(phone.strip())
