@@ -322,6 +322,13 @@ footer a:hover {
 
     </style>
 
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+        headerIds: false,
+        mangle: false
+    });
+
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 </head>
@@ -388,12 +395,16 @@ function renderChat() {
         msgDiv.className = "message " + (msg.role === "user" ? "user" : "bot");
 
         if (msg.role === "assistant") {
+
+            const rawHtml = marked.parse(msg.content);
+
             msgDiv.innerHTML = DOMPurify.sanitize(
-            marked.parse(msg.content),
-            { ADD_ATTR: ['target', 'rel', 'class'] }
-        );
-        } else {
-            msgDiv.innerText = msg.content;
+                rawHtml,
+                {
+                    ADD_ATTR: ['target', 'rel', 'class'],
+                    ADD_TAGS: ['a']
+                }
+            );
         }
 
         // create delete button
