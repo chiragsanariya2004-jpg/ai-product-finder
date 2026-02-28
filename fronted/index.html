@@ -322,15 +322,19 @@ footer a:hover {
 
     </style>
 
+
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+
+    <script>
     marked.setOptions({
         breaks: true,
         gfm: true,
         headerIds: false,
         mangle: false
     });
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+</script>
 </head>
 
 <body>
@@ -401,7 +405,7 @@ function renderChat() {
             msgDiv.innerHTML = DOMPurify.sanitize(
                 rawHtml,
                 {
-                    ADD_ATTR: ['target', 'rel', 'class'],
+                    ADD_ATTR: ['target', 'rel', 'class', 'href'],
                     ADD_TAGS: ['a']
                 }
             );
