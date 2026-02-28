@@ -143,7 +143,7 @@ End every response with:
         reply = re.sub(r"```.*?```", "", reply, flags=re.DOTALL)
         reply = reply.replace("```", "")
         reply = reply.strip()
-        
+
         conversation_store[user_id].append({
             "role": "assistant",
             "content": reply
@@ -158,17 +158,17 @@ End every response with:
         affiliate_section = "\n\n---\n"
 
         for index, phone in enumerate(phones):
-            query = urllib.parse.quote(phone)
+            query = urllib.parse.quote(phone.strip())
             link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
+            
 
-            # First phone highlight (Best Pick psychology)
             badge = " ⭐ Best Pick" if index == 0 else ""
 
-        affiliate_section += f"""
+            affiliate_section += f"""
         <a href="{link}" target="_blank" rel="nofollow sponsored noopener noreferrer" class="amazon-btn">
         🔥 Check Latest Price for {phone}{badge}
         </a>
-        """ 
+        """
 
         reply = reply + affiliate_section
 
