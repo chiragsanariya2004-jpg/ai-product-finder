@@ -139,7 +139,7 @@ End every response with:
     })
 
         # 🔥 Extract phone names from AI reply
-        phones = re.findall(r"\d+\.\s(.+?)\s\(", reply)
+        phones = re.findall(r"\d+\.\s\*\*(.+?)\*\*", reply)
 
         if not phones:
             phones = re.findall(r"#+\s(.+)", reply)

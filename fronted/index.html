@@ -388,7 +388,10 @@ function renderChat() {
         msgDiv.className = "message " + (msg.role === "user" ? "user" : "bot");
 
         if (msg.role === "assistant") {
-            msgDiv.innerHTML = DOMPurify.sanitize(marked.parse(msg.content));
+            msgDiv.innerHTML = DOMPurify.sanitize(
+            marked.parse(msg.content),
+            { ADD_ATTR: ['target', 'rel', 'class'] }
+        );
         } else {
             msgDiv.innerText = msg.content;
         }
