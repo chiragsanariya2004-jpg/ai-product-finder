@@ -400,13 +400,17 @@ function renderChat() {
 
         if (msg.role === "assistant") {
 
-            const rawHtml = marked.parse(msg.content);
+            const rawHtml = marked.parse(msg.content, {
+                breaks: true,
+                gfm: true
+            });
 
             msgDiv.innerHTML = DOMPurify.sanitize(
-                msg.content,
+                rawHtml,
                 {
                     ADD_ATTR: ['target', 'rel', 'class', 'href'],
-                    ADD_TAGS: ['a']
+                    ALLOWED_TAGS: false,   // allow default + html
+                    ALLOWED_ATTR: false
                 }
             );
         }
