@@ -403,7 +403,7 @@ function renderChat() {
             const rawHtml = marked.parse(msg.content);
 
             msgDiv.innerHTML = DOMPurify.sanitize(
-                rawHtml,
+                msg.content,
                 {
                     ADD_ATTR: ['target', 'rel', 'class', 'href'],
                     ADD_TAGS: ['a']
