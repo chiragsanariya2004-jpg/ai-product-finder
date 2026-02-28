@@ -120,6 +120,12 @@ Format:
 - Clear category tag (Best Overall / Best Gaming / Best Camera)
 - End with follow-up question
 
+IMPORTANT:
+Do NOT use markdown code blocks.
+Do NOT wrap anything in ``` .
+Return clean markdown only.
+Never wrap HTML inside code blocks.
+
 End every response with:
 “Want comparison between these options?”
 """
@@ -132,11 +138,16 @@ End every response with:
         )
 
         reply = response.choices[0].message.content
-
+        
+        # Remove markdown code blocks if any
+        reply = re.sub(r"```.*?```", "", reply, flags=re.DOTALL)
+        reply = reply.replace("```", "")
+        reply = reply.strip()
+        
         conversation_store[user_id].append({
-        "role": "assistant",
-        "content": response.choices[0].message.content
-    })
+            "role": "assistant",
+            "content": reply
+        })
 
         # 🔥 Extract phone names from AI reply
         phones = re.findall(r"\d+\.\s\*\*(.+?)\*\*", reply)
@@ -153,11 +164,11 @@ End every response with:
             # First phone highlight (Best Pick psychology)
             badge = " ⭐ Best Pick" if index == 0 else ""
 
-            affiliate_section += f"""
-            <a href="{link}" target="_blank" rel="nofollow sponsored noopener noreferrer" class="amazon-btn">
-            🔥 Check Latest Price for {phone}{badge}
-            </a>
-            """
+        affiliate_section += f"""
+        <a href="{link}" target="_blank" rel="nofollow sponsored noopener noreferrer" class="amazon-btn">
+        🔥 Check Latest Price for {phone}{badge}
+        </a>
+        """ 
 
         reply = reply + affiliate_section
 
