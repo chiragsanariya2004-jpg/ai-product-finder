@@ -149,11 +149,18 @@ End every response with:
             "content": reply
         })
 
-        # 🔥 Extract phone names from AI reply
-        phones = re.findall(r"\d+\.\s\*\*(.+?)\*\*", reply)
+       # 🔥 Extract phone names properly (clean version)
+        phones = re.findall(r"\d+\.\s*([A-Za-z0-9+ ]+)", reply)
 
-        if not phones:
-            phones = re.findall(r"#+\s(.+)", reply)
+        cleaned_phones = []
+
+        for phone in phones:
+            phone = re.sub(r"\*+", "", phone)  # remove ** if any
+            phone = re.sub(r"₹.*", "", phone)  # remove price if attached
+            phone = phone.strip()
+            cleaned_phones.append(phone)
+
+        phones = cleaned_phones  
 
         affiliate_section = "\n\n---\n"
 
