@@ -120,6 +120,11 @@ Format:
 - Clear category tag (Best Overall / Best Gaming / Best Camera)
 - End with follow-up question
 
+Use proper markdown formatting:
+- Use ## for section headings
+- Use bullet points for specs
+- Use bold for labels
+
 IMPORTANT:
 Do NOT use markdown code blocks.
 Do NOT wrap anything in ``` .

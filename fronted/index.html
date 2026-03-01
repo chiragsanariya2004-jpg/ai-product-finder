@@ -400,7 +400,11 @@ function renderChat() {
 
         if (msg.role === "assistant") {
 
-            msgDiv.innerHTML = DOMPurify.sanitize(msg.content, {
+            // Step 1: Convert markdown to HTML
+            const markdownHtml = marked.parse(msg.content);
+
+            // Step 2: Sanitize but allow affiliate links
+            msgDiv.innerHTML = DOMPurify.sanitize(markdownHtml, {
                 ADD_TAGS: ['a'],
                 ADD_ATTR: ['target', 'rel', 'class', 'href'],
             });
