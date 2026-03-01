@@ -400,7 +400,7 @@ function renderChat() {
 
         if (msg.role === "assistant") {
 
-           msgDiv.innerHTML = DOMPurify.sanitize(msg.content, {
+            msgDiv.innerHTML = DOMPurify.sanitize(msg.content, {
                 ADD_TAGS: ['a'],
                 ADD_ATTR: ['target', 'rel', 'class', 'href'],
             });
