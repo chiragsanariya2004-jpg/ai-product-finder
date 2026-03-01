@@ -63,14 +63,9 @@ async def chat(data: ChatRequest):
         if user_id not in conversation_store:
             conversation_store[user_id] = []
 
-
-
-
-
-
-        # Add all new user messages to memory
-        for msg in data.messages:
-            conversation_store[user_id].append(msg.dict())
+        # Only take latest user message
+        latest_message = data.messages[-1]
+        conversation_store[user_id].append(latest_message.dict())
 
 
 
@@ -147,7 +142,8 @@ Do not repeat the follow-up question after PHONE_LIST.
 
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
-            messages=all_messages
+            messages=all_messages,
+            temperature=0.7
         )
 
         reply = response.choices[0].message.content
@@ -165,18 +161,20 @@ Do not repeat the follow-up question after PHONE_LIST.
        # 🔥 Extract structured PHONE_LIST
         phones = []
 
-        phone_section = re.search(r"PHONE_LIST:\s*(.+)", reply, re.DOTALL)
+        phone_section = re.search(r"PHONE_LIST:\s*(.*)", reply, re.IGNORECASE | re.DOTALL)
 
         if phone_section:
             lines = phone_section.group(1).strip().split("\n")
-    
+
             for line in lines:
                 match = re.search(r"\d+\.\s*(.+)", line)
                 if match:
                     phones.append(match.group(1).strip())
+        else:
+            print("PHONE_LIST not found")
 
         # Remove PHONE_LIST from visible reply
-        reply = re.sub(r"PHONE_LIST:.*", "", reply, flags=re.DOTALL).strip()
+        reply = re.split(r"PHONE_LIST:", reply, flags=re.IGNORECASE)[0].strip()
 
         affiliate_section = "\n\n---\n"
 
@@ -198,17 +196,16 @@ Do not repeat the follow-up question after PHONE_LIST.
 
         reply = reply + affiliate_section
 
-
-
-    # Trim memory to last 20 messages only
+        # Keep only last 20 messages
         conversation_store[user_id] = conversation_store[user_id][-20:]
-        print("FINAL REPLY:\n", reply)
-        return {"reply": reply}
 
+        return {"reply": reply}
+    
     except Exception as e:
         print("ERROR:", str(e))
         return {"error": str(e)}
     
+
 @app.post("/clear")
 async def clear_chat(data: dict = Body(...)):
     user_id = data.get("user_id")
