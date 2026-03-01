@@ -412,7 +412,7 @@ function renderChat() {
 
             msgDiv.innerHTML = DOMPurify.sanitize(markdownHtml, {
                 ADD_TAGS: ['a'],
-                ADD_ATTR: ['target', 'rel', 'href'],
+                ADD_ATTR: ['target', 'rel', 'href', 'class'],
             });
 
             msgDiv.querySelectorAll("a").forEach(link => {
