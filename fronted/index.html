@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Best Phone Under Budget (2026) – AI Smartphone Finder</title>
+    <title>Best Phone Under 15000, 20000 (2026) – AI Smartphone Finder Tool</title>
 
     <meta name="description" content="Find the best smartphone under your budget using AI. Get recommendations for gaming, camera, battery and 5G phones instantly.">
 
@@ -45,7 +45,7 @@ header {
     flex: 1;
     overflow-y: auto;
     padding: 18px;
-    padding-bottom: 100px;
+    padding-bottom: 120px;
     display: flex;
     flex-direction: column;
 
@@ -247,13 +247,14 @@ footer a:hover {
 #chatSection {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
 }
 
 
 
 .input-area {
-    position: fixed;
+    position: sticky;
     bottom: 0;
     left: 0;
     right: 0;
@@ -295,7 +296,10 @@ footer a:hover {
 }
 
 .amazon-btn {
-  display: inline-block;
+  display: block;
+  width: fit-content;
+  margin: 16px auto 0;
+  text-align: center;
   margin-top: 12px;
   padding: 14px 20px;
   background: linear-gradient(135deg, #ff9900, #ffb84d);
@@ -390,6 +394,8 @@ footer a:hover {
 
 let chatHistory = [];
 
+let isSending = false;
+
 function renderChat() {
     const messagesDiv = document.getElementById("messages");
     messagesDiv.innerHTML = "";
@@ -400,13 +406,18 @@ function renderChat() {
 
         if (msg.role === "assistant") {
 
-            // Step 1: Convert markdown to HTML
+
             const markdownHtml = marked.parse(msg.content);
 
-            // Step 2: Sanitize but allow affiliate links
+
             msgDiv.innerHTML = DOMPurify.sanitize(markdownHtml, {
                 ADD_TAGS: ['a'],
-                ADD_ATTR: ['target', 'rel', 'class', 'href'],
+                ADD_ATTR: ['target', 'rel', 'href'],
+            });
+
+            msgDiv.querySelectorAll("a").forEach(link => {
+                link.target = "_blank";
+                link.rel = "noopener noreferrer nofollow sponsored";
             });
         }
 
@@ -454,7 +465,12 @@ window.onload = function() {
     document.getElementById("chatSection").style.display = "block";
     }
         const messagesDiv = document.getElementById("messages");
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        const isNearBottom =
+            messagesDiv.scrollHeight - messagesDiv.scrollTop <= messagesDiv.clientHeight + 100;
+
+        if (isNearBottom) {
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
 }
 
 
@@ -462,6 +478,9 @@ async function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
     if (!message) return;
+
+    if (isSending) return;
+        isSending = true;
 
     const messagesDiv = document.getElementById("messages");
     const sendBtn = document.getElementById("sendBtn");
@@ -512,6 +531,7 @@ async function sendMessage() {
         const data = await response.json();
 
         if (data.error) {
+            isSending = false;
             throw new Error(data.error);
         }
 
@@ -532,7 +552,12 @@ sendBtn.disabled = false;
 sendBtn.innerText = "Send";
 
 
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        const isNearBottom =
+            messagesDiv.scrollHeight - messagesDiv.scrollTop <= messagesDiv.clientHeight + 100;
+
+        if (isNearBottom) {
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
 
     } catch (error) {
         sendBtn.disabled = false;
@@ -544,6 +569,7 @@ sendBtn.innerText = "Send";
         errorMsg.className = "message bot";
         errorMsg.innerText = error.message || "Server Error";
         messagesDiv.appendChild(errorMsg);
+        isSending = false;
     }
 }
  
@@ -592,17 +618,27 @@ function quickMsg(text) {
 
 // Enter key support
 document.getElementById("userInput").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !isSending) {
         sendMessage();
     }
 });
 
 function startChat() {
-    document.getElementById("hero").style.opacity = "0";
-setTimeout(() => {
-    document.getElementById("hero").style.display = "none";
-    document.getElementById("chatSection").style.display = "block";
-}, 300);
+    const hero = document.getElementById("hero");
+    const chat = document.getElementById("chatSection");
+
+    hero.style.opacity = "0";
+
+    setTimeout(() => {
+        hero.style.display = "none";
+        chat.style.display = "flex";
+        chat.style.opacity = "0";
+
+        setTimeout(() => {
+            chat.style.opacity = "1";
+        }, 50);
+
+    }, 300);
 }
 
 function deleteMessage(index) {
