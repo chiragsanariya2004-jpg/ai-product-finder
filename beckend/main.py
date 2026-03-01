@@ -21,7 +21,7 @@ app = FastAPI(title="AI Product Expert API")
 # ✅ CORS (Vercel frontend allow)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ai-product-finder-pi.vercel.app"],  # production me specific domain dal sakte ho
+    allow_origins=["*"],  # production me specific domain dal sakte ho
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
