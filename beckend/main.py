@@ -64,8 +64,8 @@ async def chat(data: ChatRequest):
             conversation_store[user_id] = []
 
         # Only take latest user message
-        latest_message = data.messages[-1]
-        conversation_store[user_id].append(latest_message.dict())
+        conversation_store[user_id] = [msg.dict() for msg in data.messages]
+        recent_messages = conversation_store[user_id][-20:]
 
 
 
@@ -161,7 +161,7 @@ Do not repeat the follow-up question after PHONE_LIST.
        # 🔥 Extract structured PHONE_LIST
         phones = []
 
-        phone_section = re.search(r"PHONE_LIST:\s*(.*)", reply, re.IGNORECASE | re.DOTALL)
+        phone_section = re.search(r"PHONE_LIST:\s*((?:\n?\d+\..*)+)", reply)
 
         if phone_section:
             lines = phone_section.group(1).strip().split("\n")

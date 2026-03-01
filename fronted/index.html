@@ -518,9 +518,7 @@ async function sendMessage() {
             },
             body: JSON.stringify({
                 user_id: userId,
-                messages: [
-                    { role: "user", content: message }
-                ]
+                messages: chatHistory
             })
         });
 
