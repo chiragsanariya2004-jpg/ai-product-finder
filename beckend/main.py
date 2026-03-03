@@ -167,23 +167,20 @@ Do not repeat the follow-up question after PHONE_LIST.
         reply = reply.replace("```", "")
         reply = reply.strip()
 
-        conversation_store[user_id].append({
-            "role": "assistant",
-            "content": reply
-        })
+        
 
        # 🔥 Extract structured PHONE_LIST
         phones = []
 
-        phone_section = re.search(r"PHONE_LIST:\s*((?:\n?\d+\..*)+)", reply)
-
-        if phone_section:
-            lines = phone_section.group(1).strip().split("\n")
+        if "PHONE_LIST:" in reply:
+            phone_block = reply.split("PHONE_LIST:")[-1].strip()
+            lines = phone_block.split("\n")
 
             for line in lines:
-                match = re.search(r"\d+\.\s*(.+)", line)
+                match = re.search(r"\d+\.\s*(.+)", line.strip())
                 if match:
                     phones.append(match.group(1).strip())
+
         else:
             print("PHONE_LIST not found")
 
@@ -193,6 +190,10 @@ Do not repeat the follow-up question after PHONE_LIST.
         affiliate_section = "\n\n---\n"
 
         if not phones:
+            conversation_store[user_id].append({
+                "role": "assistant",
+                "content": reply
+            })
             return {"reply": reply}
 
         for index, phone in enumerate(phones):
@@ -212,6 +213,11 @@ Do not repeat the follow-up question after PHONE_LIST.
 
         # Keep only last 20 messages
         conversation_store[user_id] = conversation_store[user_id][-20:]
+
+        conversation_store[user_id].append({
+            "role": "assistant",
+            "content": reply
+        })
 
         return {"reply": reply}
     
