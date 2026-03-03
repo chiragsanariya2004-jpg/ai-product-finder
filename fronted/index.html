@@ -405,13 +405,15 @@ function renderChat() {
 
         if (msg.role === "assistant") {
 
+            let content = msg.content;
 
-            const markdownHtml = marked.parse(msg.content);
+            // First render markdown
+            let html = marked.parse(content);
 
-
-            msgDiv.innerHTML = DOMPurify.sanitize(markdownHtml, {
-                ADD_TAGS: ['a'],
-                ADD_ATTR: ['target', 'rel', 'href', 'class'],
+            // Then sanitize but allow full anchor tags
+            msgDiv.innerHTML = DOMPurify.sanitize(html, {
+                ALLOWED_TAGS: ['h1','h2','h3','p','ul','li','strong','em','a','hr','br'],
+                ALLOWED_ATTR: ['href','target','rel','class']
             });
 
             msgDiv.querySelectorAll("a").forEach(link => {
