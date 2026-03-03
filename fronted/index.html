@@ -332,12 +332,11 @@ footer a:hover {
 
     <script>
     marked.setOptions({
-    breaks: true,
-    gfm: true,
-    headerIds: false,
-    mangle: false,
-    sanitize: false   // 🔥 ADD THIS LINE
-});
+        breaks: true,
+        gfm: true,
+        headerIds: false,
+        mangle: false,
+    });
 </script>
 </head>
 
@@ -408,13 +407,14 @@ function renderChat() {
 
             let content = msg.content;
 
-            let html = content.includes("<a")
-                ? content
-                : marked.parse(content);
+            let html = marked.parse(content);
 
 
             msgDiv.innerHTML = DOMPurify.sanitize(html, {
-                ALLOWED_TAGS: ['h1','h2','h3','p','ul','li','strong','em','a','hr','br'],
+                ALLOWED_TAGS: [
+                'h1','h2','h3','p','ul','li','strong','em','a','hr','br',
+                'table','thead','tbody','tr','th','td'
+                ],
                 ALLOWED_ATTR: ['href','target','rel','class']
             });
 
