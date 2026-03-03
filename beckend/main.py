@@ -152,7 +152,7 @@ Do not repeat the follow-up question after PHONE_LIST.
 ] + conversation_store[user_id]
 
         response = client.chat.completions.create(
-            model="groq/llama3-14b-4096",
+            model="openai/gpt-oss-20b",
             messages=all_messages,
             temperature=0.3
         )
