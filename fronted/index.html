@@ -332,11 +332,12 @@ footer a:hover {
 
     <script>
     marked.setOptions({
-        breaks: true,
-        gfm: true,
-        headerIds: false,
-        mangle: false
-    });
+    breaks: true,
+    gfm: true,
+    headerIds: false,
+    mangle: false,
+    sanitize: false   // 🔥 ADD THIS LINE
+});
 </script>
 </head>
 
@@ -407,10 +408,11 @@ function renderChat() {
 
             let content = msg.content;
 
-            // First render markdown
-            let html = marked.parse(content);
+            let html = content.includes("<a")
+                ? content
+                : marked.parse(content);
 
-            // Then sanitize but allow full anchor tags
+
             msgDiv.innerHTML = DOMPurify.sanitize(html, {
                 ALLOWED_TAGS: ['h1','h2','h3','p','ul','li','strong','em','a','hr','br'],
                 ALLOWED_ATTR: ['href','target','rel','class']
