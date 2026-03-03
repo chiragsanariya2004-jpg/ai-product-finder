@@ -1,5 +1,4 @@
 import os
-import urllib.parse
 import re
 from typing import List
 from fastapi import FastAPI
@@ -65,7 +64,7 @@ async def chat(data: ChatRequest):
 
         # Only take latest user message
         recent_messages = [msg.dict() for msg in data.messages][-20:]
-        conversation_store[user_id] = recent_messages
+        conversation_store[user_id] = conversation_store[user_id][-20:]
 
         all_messages = [
     {
@@ -172,8 +171,10 @@ Do not repeat the follow-up question after PHONE_LIST.
        # 🔥 Extract structured PHONE_LIST
         phones = []
 
-        if "PHONE_LIST:" in reply:
-            phone_block = reply.split("PHONE_LIST:")[-1].strip()
+        phone_match = re.search(r"PHONE_LIST:(.*)", reply, re.DOTALL)
+
+        if phone_match:
+            phone_block = phone_match.group(1).strip()
             lines = phone_block.split("\n")
 
             for line in lines:
@@ -197,18 +198,22 @@ Do not repeat the follow-up question after PHONE_LIST.
             return {"reply": reply}
 
         for index, phone in enumerate(phones):
-            query = urllib.parse.quote(phone.strip())
+            from urllib.parse import quote
+
+            query = quote(phone.strip())
             link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
             
 
             badge = " ⭐ Best Pick" if index == 0 else ""
 
-            affiliate_section += f"""
-        <a href="{link}" target="_blank" rel="nofollow sponsored noopener noreferrer" class="amazon-btn">
-        🔥 Check Latest Price for {phone}{badge}
-        </a>
-        """
-
+            affiliate_section += (
+                f'\n<a href="{link}" target="_blank" '
+                f'rel="nofollow sponsored noopener noreferrer" '
+                f'class="amazon-btn">'
+                f'🔥 Check Latest Price for {phone}{badge}'
+                f'</a>\n'
+            )
+            
         reply = reply + affiliate_section
 
         # Keep only last 20 messages
