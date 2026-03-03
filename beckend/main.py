@@ -209,7 +209,7 @@ Do not repeat the follow-up question after PHONE_LIST.
                 f'\n<a href="{link}" target="_blank" '
                 f'rel="nofollow sponsored noopener noreferrer" '
                 f'class="amazon-btn">'
-                f'🔥 Check Latest Price for {phone}{badge}'
+                f'🛒 Check Live Discount for {phone}{badge}'
                 f'</a>\n'
             )
             

@@ -97,6 +97,12 @@ header {
     color: #ffffff;
 }
 
+.bot h2:first-of-type {
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+  padding: 10px;
+  border-radius: 8px;
+}
+
 .bot h2 {
     font-size: 17px;
     margin: 10px 0 6px;
@@ -235,7 +241,7 @@ footer a:hover {
 
 /* HERO SECTION */
 #hero {
-    height: 100vh;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -312,6 +318,22 @@ footer a:hover {
   transition: 0.2s ease;
 }
 
+.urgency-line {
+  min-height: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: #f87171;
+  margin-top: 10px;
+  font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
 .amazon-btn:hover {
   background: #e68a00;
   transform: translateY(-2px);
@@ -327,8 +349,6 @@ footer a:hover {
 
     </style>
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
 
@@ -340,6 +360,17 @@ footer a:hover {
         mangle: false,
     });
 </script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "AI Smartphone Finder Tool",
+  "applicationCategory": "ShoppingApplication",
+  "operatingSystem": "All"
+}
+</script>
+
 </head>
 
 <body>
@@ -350,9 +381,21 @@ footer a:hover {
         AI-powered recommendations based on your budget, gaming, camera & battery needs.
     </p>
 
+    <p style="font-size:14px; opacity:0.7; margin-top:15px;">
+        ✅ 1000+ phones analyzed • Updated March 2026
+    </p>
+
     <button onclick="startChat()" class="hero-btn">
         🔍 Find My Perfect Phone
     </button>
+</section>
+
+<section style="padding:40px 20px; text-align:center;">
+<h2>Best Phone Under 15000 & 20000 (2026 Guide)</h2>
+<p>
+Compare gaming, camera, battery and 5G smartphones instantly using AI.
+Updated monthly with latest price drops and performance reviews.
+</p>
 </section>
 
 
@@ -422,6 +465,17 @@ function renderChat() {
             msgDiv.querySelectorAll("a").forEach(link => {
                 link.target = "_blank";
                 link.rel = "noopener noreferrer nofollow sponsored";
+            });
+
+            msgDiv.querySelectorAll(".amazon-btn").forEach(btn => {
+                if (!btn.previousElementSibling || 
+                    !btn.previousElementSibling.classList.contains("urgency-line")) {
+
+                    const urgency = document.createElement("div");
+                    urgency.className = "urgency-line";
+                    urgency.innerText = "⚡ Price may increase soon – Check now";
+                    btn.parentNode.insertBefore(urgency, btn);
+                }
             });
 
         } else {
