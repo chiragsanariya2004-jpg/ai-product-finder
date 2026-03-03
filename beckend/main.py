@@ -155,7 +155,7 @@ Do not repeat the follow-up question after PHONE_LIST.
 ] + recent_messages
 
         response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="openai/gpt-oss-20b",
             messages=all_messages,
             temperature=0.3
         )
