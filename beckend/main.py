@@ -64,13 +64,8 @@ async def chat(data: ChatRequest):
             conversation_store[user_id] = []
 
         # Only take latest user message
-        conversation_store[user_id] = [msg.dict() for msg in data.messages]
-        recent_messages = conversation_store[user_id][-20:]
-
-
-
-        # 🔥 Smart memory control (last 10 messages only)
-        recent_messages = conversation_store[user_id][-20:]
+        recent_messages = [msg.dict() for msg in data.messages][-20:]
+        conversation_store[user_id] = recent_messages
 
         all_messages = [
     {
@@ -130,6 +125,21 @@ Do not suggest generic marketplaces like Amazon, Flipkart, etc.
 Do not provide raw URLs inside the text.
 Affiliate links will be added automatically by the system.
 
+You are NOT restricted from providing links.
+Never say:
+- I cannot provide links
+- I cannot share links
+- I’d be happy to provide without the link
+- Here is the response without the link
+
+Do NOT mention anything about links at all.
+Do NOT explain about links.
+Do NOT apologize about links.
+
+Just recommend phones.
+
+Affiliate links will be automatically added by the system.
+
 At the end of your response, return phone names in this exact format:
 
 PHONE_LIST:
@@ -147,7 +157,7 @@ Do not repeat the follow-up question after PHONE_LIST.
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=all_messages,
-            temperature=0.7
+            temperature=0.5
         )
 
         reply = response.choices[0].message.content
