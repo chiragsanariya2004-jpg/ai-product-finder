@@ -446,7 +446,7 @@ delBtn.onclick = () => {
 }
         messagesDiv.appendChild(msgDiv);
     });
-
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 let userId = localStorage.getItem("userId");
