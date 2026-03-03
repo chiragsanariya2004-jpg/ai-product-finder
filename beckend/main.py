@@ -45,7 +45,8 @@ def home():
     return {"status": "API is running 🚀"}
 
 # ✅ Chat endpoint
-conversation_store = {}
+from collections import defaultdict
+conversation_store = defaultdict(list)
 
 api_key = os.getenv("GROQ_API_KEY")
 
@@ -58,13 +59,10 @@ client = Groq(api_key=api_key)
 async def chat(data: ChatRequest):
     try:
         user_id = data.user_id  # later login system me dynamic hoga
-        
-        if user_id not in conversation_store:
-            conversation_store[user_id] = []
 
         # Only take latest user message
         recent_messages = [msg.dict() for msg in data.messages][-20:]
-        conversation_store[user_id] = conversation_store[user_id][-20:]
+        conversation_store[user_id] = recent_messages[-20:]
 
         all_messages = [
     {
@@ -151,10 +149,10 @@ Do not write anything after PHONE_LIST.
 Do not repeat the follow-up question after PHONE_LIST.
 """
     }
-] + recent_messages
+] + conversation_store[user_id]
 
         response = client.chat.completions.create(
-            model="openai/gpt-oss-20b",
+            model="llama3-70b-8192",
             messages=all_messages,
             temperature=0.3
         )
@@ -171,7 +169,7 @@ Do not repeat the follow-up question after PHONE_LIST.
        # 🔥 Extract structured PHONE_LIST
         phones = []
 
-        phone_match = re.search(r"PHONE_LIST:(.*)", reply, re.DOTALL)
+        phone_match = re.search(r"PHONE_LIST:\s*(.*)", reply, re.DOTALL | re.IGNORECASE)
 
         if phone_match:
             phone_block = phone_match.group(1).strip()
@@ -189,6 +187,7 @@ Do not repeat the follow-up question after PHONE_LIST.
         reply = re.split(r"PHONE_LIST:", reply, flags=re.IGNORECASE)[0].strip()
 
         affiliate_section = "\n\n---\n"
+        affiliate_section += "\n⚡ Prices updated today – Limited stock available\n"
 
         if not phones:
             conversation_store[user_id].append({
@@ -200,7 +199,7 @@ Do not repeat the follow-up question after PHONE_LIST.
         for index, phone in enumerate(phones):
             from urllib.parse import quote
 
-            query = quote(phone.strip())
+            query = quote(phone.strip() + " 8GB 128GB")
             link = f"https://www.amazon.in/s?k={query}&tag={AFFILIATE_TAG}"
             
 
@@ -215,9 +214,6 @@ Do not repeat the follow-up question after PHONE_LIST.
             )
             
         reply = reply + affiliate_section
-
-        # Keep only last 20 messages
-        conversation_store[user_id] = conversation_store[user_id][-20:]
 
         conversation_store[user_id].append({
             "role": "assistant",
