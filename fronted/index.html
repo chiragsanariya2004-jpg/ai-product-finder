@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Best Phone Under 15000, 20000 (2026) – AI Smartphone Finder Tool</title>
+
+    <meta charset="UTF-8">
 
     <meta name="description" content="Find the best smartphone under your budget using AI. Get recommendations for gaming, camera, battery and 5G phones instantly.">
 
@@ -11,7 +13,7 @@
 
     <meta name="robots" content="index, follow">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="icon" type="image/png" href="logo.png">
     
@@ -69,6 +71,25 @@ header {
     font-size: 14px;
     word-wrap: break-word;
     animation: fadeIn 0.25s ease;
+    position: relative;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    cursor: pointer;
+    opacity: 0;
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+.message:hover .delete-btn {
+    opacity: 0.6;
+}
+
+.message:hover .delete-btn:hover {
+    opacity: 1;
 }
 
 @keyframes fadeIn {
@@ -471,6 +492,7 @@ let isSending = false;
 function renderChat() {
     const messagesDiv = document.getElementById("messages");
     messagesDiv.innerHTML = "";
+    const fragment = document.createDocumentFragment();
 
     chatHistory.forEach((msg, index) => {
         const msgDiv = document.createElement("div");
@@ -512,22 +534,24 @@ function renderChat() {
 
         // create delete button
 const delBtn = document.createElement("span");
-delBtn.innerHTML = " 🗑️";
+delBtn.className = "delete-btn";
+delBtn.innerHTML = "🗑";
 delBtn.style.cursor = "pointer";
 delBtn.style.marginLeft = "8px";
 delBtn.style.fontSize = "14px";
 
 delBtn.onclick = () => {
-    const confirmDelete = confirm("Are you sure you want to delete this message?");
-    if (confirmDelete) {
-        deleteMessage(index);
+    if (confirm("Delete this message?")) {
+        deleteMessage(msg.id);
     }
 };
-        if (msg.role === "user") {
-    msgDiv.appendChild(delBtn);
-}
-        messagesDiv.appendChild(msgDiv);
+
+        msgDiv.appendChild(delBtn);
+        fragment.appendChild(msgDiv);
+        
     });
+
+    messagesDiv.appendChild(fragment);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
@@ -580,13 +604,13 @@ async function sendMessage() {
 
 
     // Save to history
-    chatHistory.push({
-        role: "user",
-        content: message
-    });
-
-    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
-    renderChat();
+chatHistory.push({
+    id: crypto.randomUUID(),
+    role: "user",
+    content: message
+});
+localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+renderChat();
 
     input.value = "";
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -633,13 +657,13 @@ async function sendMessage() {
         loadingMsg.remove();
 
 
-        chatHistory.push({
-    role: "assistant",
-    content: data.reply
-});
-
-localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
-renderChat();
+    chatHistory.push({
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: data.reply
+    });
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+    renderChat();
 
 sendBtn.disabled = false;
 sendBtn.innerText = "Send";
@@ -736,8 +760,8 @@ function startChat() {
     }, 300);
 }
 
-function deleteMessage(index) {
-    chatHistory.splice(index, 1);
+function deleteMessage(id) {
+    chatHistory = chatHistory.filter(msg => msg.id !== id);
     localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
     renderChat();
 }
