@@ -14,6 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="icon" type="image/png" href="logo.png">
+    
+    <link rel="canonical" href="https://ai-product-finder-pi.vercel.app/">
 
     <style>
        body {
@@ -684,7 +686,7 @@ function quickMsg(text) {
 }
 
 // Enter key support
-document.getElementById("userInput").addEventListener("keypress", function(event) {
+document.getElementById("userInput").addEventListener("keydown", function(event) {
     if (event.key === "Enter" && !isSending) {
         sendMessage();
     }
