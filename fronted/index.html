@@ -625,7 +625,7 @@ renderChat();
 
     try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 20000); // 20 sec timeout
+        const timeout = setTimeout(() => controller.abort(), 60000); 
 
         const cleanMessages = chatHistory.map(msg => ({
             role: msg.role,
@@ -639,7 +639,7 @@ renderChat();
             },
             body: JSON.stringify({
                 user_id: userId,
-                messages: cleanMessages
+                messages: cleanMessages.slice(-6)
             }),
             signal: controller.signal
         });
@@ -647,7 +647,8 @@ renderChat();
         clearTimeout(timeout);
 
         if (!response.ok) {
-            throw new Error("API error");
+            const text = await response.text();
+            throw new Error(text || "API error");
         }
 
         const data = await response.json();
@@ -684,6 +685,11 @@ isSending = false;
         }
 
     } catch (error) {
+
+        if (error.name === "AbortError") {
+        error = new Error("Server took too long. Please try again.");
+        }
+        
         sendBtn.disabled = false;
         sendBtn.innerText = "Send";
 
