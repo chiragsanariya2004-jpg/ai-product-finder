@@ -18,6 +18,11 @@
     <link rel="icon" type="image/png" href="logo.png">
     
     <link rel="canonical" href="https://ai-product-finder-pi.vercel.app/">
+    
+    <meta property="og:title" content="AI Smartphone Finder Tool">
+    <meta property="og:description" content="Find the best smartphone under your budget instantly using AI">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="logo.png">
 
     <style>
 
@@ -37,6 +42,7 @@
 header {
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(20px);
+    box-shadow:0 4px 20px rgba(0,0,0,0.4);
     padding: 18px;
     text-align: center;
     font-weight: 600;
@@ -64,7 +70,8 @@ header {
 
 /* MESSAGE BASE */
 .message {
-    max-width: 100%;
+    max-width: 80%;
+    position: relative;
     padding: 14px;
     border-radius: 16px;
     line-height: 1.7;
@@ -74,17 +81,23 @@ header {
 }
 
 .delete-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    padding: 4px 6px;
     display: block;
     text-align: right;
     margin-bottom: 8px;
     margin-right: 6px;
     cursor: pointer;
-    opacity: 0.7;
+    opacity: 0;
     transition:0.2s;
-    font-size: 13px;
+    font-size: 12px;
 }
 
-.message:hover + .delete-btn {
+.message:hover .delete-btn {
     opacity: 1;
 }
 
@@ -104,6 +117,16 @@ header {
     color: white;
     border-bottom-right-radius: 6px;
 
+}
+
+.user .delete-btn{
+right:-8px;
+left:auto;
+}
+
+.bot .delete-btn{
+left:-8px;
+right:auto;
 }
 
 /* BOT MESSAGE */
@@ -370,6 +393,11 @@ footer a:hover {
   transform: translateY(-2px);
 }
 
+.amazon-btn::after{
+content:" →";
+font-weight:900;
+}
+
 @media (max-width: 600px) {
   .amazon-btn {
     display: block;
@@ -395,15 +423,30 @@ footer a:hover {
   word-break: break-word;
 }
 
-.bot + .delete-btn {
-    text-align: left;
-    margin-left: 6px;
-    margin-right: 0;
+.typing{
+display:flex;
+gap:5px;
 }
 
-.user + .delete-btn {
-    text-align: right;
-    margin-right: 6px;
+.typing span{
+width:6px;
+height:6px;
+background:white;
+border-radius:50%;
+animation:bounce 1.4s infinite;
+}
+
+.typing span:nth-child(2){
+animation-delay:0.2s;
+}
+
+.typing span:nth-child(3){
+animation-delay:0.4s;
+}
+
+@keyframes bounce{
+0%,80%,100%{transform:scale(0)}
+40%{transform:scale(1)}
 }
 
     </style>
@@ -488,7 +531,7 @@ Updated monthly with latest price drops and performance reviews.
 
 </div>
     <div class="input-area">
-        <input type="text" id="userInput" placeholder="Enter your budget and needs..." />
+        <input type="text" id="userInput" placeholder="Example: gaming phone under 15000" />
         <button id="sendBtn" onclick="sendMessage()">Send</button>
     </div>
 </div>
@@ -556,8 +599,8 @@ delBtn.onclick = () => {
     }
 };
 
+        msgDiv.appendChild(delBtn);
         fragment.appendChild(msgDiv);
-        fragment.appendChild(delBtn);
         
     });
 
@@ -574,17 +617,22 @@ if (!userId) {
 
 // Load chat from localStorage on page load
 window.onload = function() {
+
     const savedChat = localStorage.getItem("chatHistory");
     
-    if (chatHistory.length > 0) {
-        document.getElementById("guideSection").style.display = "none";
+    if (savedChat) {
+        try {
+        chatHistory = JSON.parse(savedChat) || [];
+        } catch {
+        chatHistory = [];
+        }
     }
 
-    if (savedChat) {
-        chatHistory = JSON.parse(savedChat);
-        renderChat();
+     if (chatHistory.length > 0) {
+        document.getElementById("guideSection").style.display = "none";
+        document.getElementById("hero").style.display = "none";
+        document.getElementById("chatSection").style.display = "flex";
     }
-    
     
     if (chatHistory.length > 0) {
         document.getElementById("hero").style.display = "none";
@@ -637,9 +685,19 @@ renderChat();
     const loadingMsg = document.createElement("div");
     loadingMsg.className = "message bot";
     loadingMsg.style.opacity = "0.7";
-    loadingMsg.innerHTML = "Typing<span class='dots'></span>";
+    loadingMsg.innerHTML = `
+    <div class="typing">
+    <span></span>
+    <span></span>
+    <span></span>
+    </div>
+    `;
+
     messagesDiv.appendChild(loadingMsg);
+
+    requestAnimationFrame(()=>{
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
 
     try {
         const controller = new AbortController();
@@ -766,8 +824,11 @@ function quickMsg(text) {
 
 // Enter key support
 document.getElementById("userInput").addEventListener("keydown", function(event) {
-    if (event.key === "Enter" && !isSending) {
-        sendMessage();
+    if (event.key === "Enter") {
+    event.preventDefault();
+    if(!isSending){
+    sendMessage();
+    }
     }
 });
 
