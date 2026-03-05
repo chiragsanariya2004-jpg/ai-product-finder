@@ -439,7 +439,7 @@ footer a:hover {
     </button>
 </section>
 
-<section style="padding:40px 20px; text-align:center;">
+<section id="guideSection" style="padding:40px 20px; text-align:center;">
 <h2>Best Phone Under 15000 & 20000 (2026 Guide)</h2>
 <p>
 Compare gaming, camera, battery and 5G smartphones instantly using AI.
@@ -565,16 +565,20 @@ if (!userId) {
 // Load chat from localStorage on page load
 window.onload = function() {
     const savedChat = localStorage.getItem("chatHistory");
+    
+    if (chatHistory.length > 0) {
+        document.getElementById("guideSection").style.display = "none";
+    }
 
     if (savedChat) {
-    chatHistory = JSON.parse(savedChat);
-    renderChat();
+        chatHistory = JSON.parse(savedChat);
+        renderChat();
     }
     
     
     if (chatHistory.length > 0) {
-    document.getElementById("hero").style.display = "none";
-    document.getElementById("chatSection").style.display = "block";
+        document.getElementById("hero").style.display = "none";
+        document.getElementById("chatSection").style.display = "block";
     }
         const messagesDiv = document.getElementById("messages");
         const isNearBottom =
@@ -614,6 +618,10 @@ renderChat();
 
     input.value = "";
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    // Hide guide section after first message
+    const guide = document.getElementById("guideSection");
+    if (guide) guide.style.display = "none"; 
 
     // Loading
     const loadingMsg = document.createElement("div");
@@ -689,7 +697,7 @@ isSending = false;
         if (error.name === "AbortError") {
         error = new Error("Server took too long. Please try again.");
         }
-        
+
         sendBtn.disabled = false;
         sendBtn.innerText = "Send";
 
