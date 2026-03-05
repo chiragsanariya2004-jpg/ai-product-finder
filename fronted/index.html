@@ -14,15 +14,17 @@
     <meta name="robots" content="index, follow">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="google-site-verification" content="https://ai-product-finder-pi.vercel.app/">
     
     <link rel="icon" type="image/png" href="logo.png">
     
     <link rel="canonical" href="https://ai-product-finder-pi.vercel.app/">
     
-    <meta property="og:title" content="AI Smartphone Finder Tool">
-    <meta property="og:description" content="Find the best smartphone under your budget instantly using AI">
-    <meta property="og:type" content="website">
+    <meta property="og:title" content="Best Phone Under 15000 (2026)">
+    <meta property="og:description" content="AI tool to find best gaming, camera and battery phones under budget.">
     <meta property="og:image" content="logo.png">
+    <meta property="og:url" content="https://ai-product-finder-pi.vercel.app/">
 
     <style>
 
@@ -78,6 +80,7 @@ header {
     font-size: 14px;
     word-wrap: break-word;
     animation: fadeIn 0.25s ease;
+    box-shadow:0 5px 15px rgba(0,0,0,0.25);
 }
 
 .delete-btn {
@@ -118,10 +121,15 @@ header {
 
 }
 
-.user .delete-btn,
-.bot .delete-btn{
+.user .delete-btn{
 right:6px;
 left:auto;
+}
+
+.bot .delete-btn{
+left:6px;
+top:6px;
+right:auto;
 }
 
 /* BOT MESSAGE */
@@ -460,11 +468,26 @@ animation-delay:0.4s;
 
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "AI Smartphone Finder Tool",
-  "applicationCategory": "ShoppingApplication",
-  "operatingSystem": "All"
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "Which phone is best under 15000?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Phones like iQOO Z6 Lite, Redmi Note series and Realme Narzo are popular choices under 15000."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Which phone is best for gaming under 20000?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Phones with Snapdragon 7 series or Dimensity processors offer the best gaming performance under 20000."
+   }
+  }
+ ]
 }
 </script>
 
@@ -487,12 +510,27 @@ animation-delay:0.4s;
     </button>
 </section>
 
-<section id="guideSection" style="padding:40px 20px; text-align:center;">
+<section id="guideSection" style="padding:40px 20px; max-width:900px; margin:auto; text-align:center;">
 <h2>Best Phone Under 15000 & 20000 (2026 Guide)</h2>
+
 <p>
-Compare gaming, camera, battery and 5G smartphones instantly using AI.
-Updated monthly with latest price drops and performance reviews.
+Finding the best smartphone under ₹15000 or ₹20000 can be confusing because dozens of new phones launch every month.
+Our AI smartphone finder analyzes performance, camera quality, battery life, gaming benchmarks and price drops to suggest the best phone for your needs.
 </p>
+
+<h3>Popular Searches</h3>
+
+<p>
+• Best gaming phone under 15000  
+• Best camera phone under 20000  
+• 5G phone with best battery  
+• Budget phones for PUBG and BGMI
+</p>
+
+<p>
+Simply ask our AI advisor your requirement and get instant smartphone recommendations.
+</p>
+
 </section>
 
 
@@ -622,16 +660,14 @@ window.onload = function() {
         }
     }
 
-     if (chatHistory.length > 0) {
+    renderChat();
+
+    if (chatHistory.length > 0) {
         document.getElementById("guideSection").style.display = "none";
         document.getElementById("hero").style.display = "none";
         document.getElementById("chatSection").style.display = "flex";
     }
     
-    if (chatHistory.length > 0) {
-        document.getElementById("hero").style.display = "none";
-        document.getElementById("chatSection").style.display = "block";
-    }
         const messagesDiv = document.getElementById("messages");
         const isNearBottom =
             messagesDiv.scrollHeight - messagesDiv.scrollTop <= messagesDiv.clientHeight + 100;
@@ -645,6 +681,10 @@ window.onload = function() {
 async function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
+    if(message.length > 200) {
+    alert("Message too long");
+    return;
+    }
     if (!message) return;
 
     if (isSending) return;
@@ -829,7 +869,7 @@ document.getElementById("userInput").addEventListener("keydown", function(event)
 function startChat() {
     const hero = document.getElementById("hero");
     const chat = document.getElementById("chatSection");
-
+    document.getElementById("userInput").focus();
     hero.style.opacity = "0";
 
     setTimeout(() => {
@@ -839,9 +879,10 @@ function startChat() {
 
         setTimeout(() => {
             chat.style.opacity = "1";
+            document.getElementById("userInput").focus();
         }, 50);
-
     }, 300);
+
 }
 
 function deleteMessage(id) {
