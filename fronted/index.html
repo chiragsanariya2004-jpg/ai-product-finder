@@ -82,23 +82,22 @@ header {
 
 .delete-btn {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 50%;
+    top: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 6px;
     padding: 4px 6px;
-    display: block;
-    text-align: right;
-    margin-bottom: 8px;
-    margin-right: 6px;
     cursor: pointer;
-    opacity: 0;
-    transition:0.2s;
     font-size: 12px;
+
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .message:hover .delete-btn {
     opacity: 1;
+    transform: translateY(0);
 }
 
 .message:hover .delete-btn:hover {
@@ -119,14 +118,10 @@ header {
 
 }
 
-.user .delete-btn{
-right:-8px;
-left:auto;
-}
-
+.user .delete-btn,
 .bot .delete-btn{
-left:-8px;
-right:auto;
+right:6px;
+left:auto;
 }
 
 /* BOT MESSAGE */
@@ -590,7 +585,6 @@ const delBtn = document.createElement("span");
 delBtn.className = "delete-btn";
 delBtn.innerHTML = "🗑";
 delBtn.style.cursor = "pointer";
-delBtn.style.marginLeft = "8px";
 delBtn.style.fontSize = "14px";
 
 delBtn.onclick = () => {
