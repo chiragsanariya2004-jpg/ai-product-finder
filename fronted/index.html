@@ -75,12 +75,12 @@ header {
 
 .delete-btn {
     display: block;
-    margin-top: 6px;
     text-align: right;
+    margin-bottom: 8px;
+    margin-right: 6px;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0.7;
     font-size: 13px;
-    transition: 0.2s ease;
 }
 
 .message:hover .delete-btn {
@@ -545,8 +545,8 @@ delBtn.onclick = () => {
     }
 };
 
-        msgDiv.appendChild(delBtn);
         fragment.appendChild(msgDiv);
+        fragment.appendChild(delBtn);
         
     });
 
