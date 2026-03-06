@@ -55,14 +55,26 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
+@app.on_event("startup")
+async def warmup():
+    try:
+        client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": "hi"}],
+            max_tokens=5
+        )
+        print("AI warmed up")
+    except Exception as e:
+        print("Warmup failed", e)
+
 @app.post("/chat")
 async def chat(data: ChatRequest):
     try:
         user_id = data.user_id  # later login system me dynamic hoga
 
         # Only take latest user message
-        recent_messages = [msg.dict() for msg in data.messages][-20:]
-        conversation_store[user_id] = recent_messages[-20:]
+        recent_messages = [msg.dict() for msg in data.messages][-10:]
+        conversation_store[user_id] = recent_messages
 
         all_messages = [
     {
@@ -152,7 +164,7 @@ Do not repeat the follow-up question after PHONE_LIST.
 ] + conversation_store[user_id]
 
         response = client.chat.completions.create(
-            model="openai/gpt-oss-20b",
+            model="llama-3.1-8b-instant",
             messages=all_messages,
             temperature=0.3
         )
@@ -169,17 +181,16 @@ Do not repeat the follow-up question after PHONE_LIST.
        # 🔥 Extract structured PHONE_LIST
         phones = []
 
-        phone_match = re.search(r"PHONE_LIST:\s*(.*)", reply, re.DOTALL | re.IGNORECASE)
+        parts = reply.split("PHONE_LIST:")
 
-        if phone_match:
-            phone_block = phone_match.group(1).strip()
+        if len(parts) > 1:
+            phone_block = parts[1].strip()
             lines = phone_block.split("\n")
 
             for line in lines:
                 match = re.search(r"\d+\.\s*(.+)", line.strip())
                 if match:
                     phones.append(match.group(1).strip())
-
         else:
             print("PHONE_LIST not found")
 
