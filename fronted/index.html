@@ -16,7 +16,6 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0b0f19">
-    <meta name="google-site-verification" content="https://ai-product-finder-pi.vercel.app/">
     
     <link rel="icon" type="image/png" href="logo.png">
     
@@ -513,7 +512,7 @@ animation-delay:0.4s;
 </section>
 
 <section id="guideSection" style="padding:40px 20px; max-width:900px; margin:auto; text-align:center;">
-<h2>Best Phone Under 15000 & 20000 (2026 Guide)</h2>
+<h2>Best Phone Under 15000 and 20000 in India (2026)</h2>
 
 <p>
 Finding the best smartphone under ₹15000 or ₹20000 can be confusing because dozens of new phones launch every month.
@@ -537,31 +536,31 @@ Simply ask our AI advisor your requirement and get instant smartphone recommenda
 
 <div style="margin-top:20px; line-height:2;">
 
-<a href="/best-phone-under-20000">Best Phone Under 20000</a><br>
+<a href="/best-phone-under-20000.html">Best Phone Under 20000</a><br>
 
-<a href="/best-gaming-phone-under-15000">Best Gaming Phone Under 15000</a><br>
+<a href="/best-gaming-phone-under-15000.html">Best Gaming Phone Under 15000</a><br>
 
-<a href="/best-camera-phone-under-20000">Best Camera Phone Under 20000</a><br>
+<a href="/best-camera-phone-under-20000.html">Best Camera Phone Under 20000</a><br>
 
-<a href="/best-battery-phone-under-15000">Best Battery Phone Under 15000</a><br>
+<a href="/best-battery-phone-under-15000.html">Best Battery Phone Under 15000</a><br>
 
-<a href="/best-5g-phone-under-15000">Best 5G Phone Under 15000</a><br>
+<a href="/best-5g-phone-under-15000.html">Best 5G Phone Under 15000</a><br>
 
-<a href="/best-phone-for-bgmi-under-20000">Best Phone For BGMI Under 20000</a><br>
+<a href="/best-phone-for-bgmi-under-20000.html">Best Phone For BGMI Under 20000</a><br>
 
-<a href="/best-phone-under-25000">Best Phone Under 25000</a><br>
+<a href="/best-phone-under-25000.html">Best Phone Under 25000</a><br>
 
-<a href="/best-camera-phone-under-25000">Best Camera Phone Under 25000</a><br>
+<a href="/best-camera-phone-under-25000.html">Best Camera Phone Under 25000</a><br>
 
-<a href="/best-phone-for-video-recording">Best Phone For Video Recording</a><br>
+<a href="/best-phone-for-video-recording.html">Best Phone For Video Recording</a><br>
 
-<a href="/best-phone-for-students">Best Phone For Students</a><br>
+<a href="/best-phone-for-students.html">Best Phone For Students</a><br>
 
-<a href="/best-camera-phone-under-30000">Best camera phone under 30000</a><br>
+<a href="/best-camera-phone-under-30000.html">Best camera phone under 30000</a><br>
 
-<a href="/best-gaming-phone-under-20000">Best Gaming Phone Under 20000</a><br>
+<a href="/best-gaming-phone-under-20000.html">Best Gaming Phone Under 20000</a><br>
 
-<a href="/best-phone-under-15000">Best Phone Under 15000</a>
+<a href="/best-phone-under-15000.html">Best Phone Under 15000</a>
 
 </div>
 
@@ -902,21 +901,20 @@ document.getElementById("userInput").addEventListener("keydown", function(event)
 
 function startChat() {
     const hero = document.getElementById("hero");
+    const guide = document.getElementById("guideSection");
     const chat = document.getElementById("chatSection");
+
+    hero.style.display = "none";
+    guide.style.display = "none";
+
+    chat.style.display = "flex";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "instant"
+    });
+
     document.getElementById("userInput").focus();
-    hero.style.opacity = "0";
-
-    setTimeout(() => {
-        hero.style.display = "none";
-        chat.style.display = "flex";
-        chat.style.opacity = "0";
-
-        setTimeout(() => {
-            chat.style.opacity = "1";
-            document.getElementById("userInput").focus();
-        }, 50);
-    }, 300);
-
 }
 
 function deleteMessage(id) {
