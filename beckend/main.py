@@ -47,6 +47,7 @@ def home():
 # ✅ Chat endpoint
 from collections import defaultdict
 conversation_store = defaultdict(list)
+shown_phones_store = defaultdict(list)
 
 api_key = os.getenv("GROQ_API_KEY")
 
@@ -106,6 +107,9 @@ Rules:
 10. If multiple good options exist, offer a quick comparison table.
 11. Always mention approximate current price in INR for each phone.
 12. The first recommendation should be the strongest overall pick.
+13. If the user asks for "more", "aur dikhavo", "show more", or "next options":
+- Do NOT repeat previously suggested phones.
+- Suggest 3 NEW phones within the same criteria.
 Tone:
 - Confident
 - Helpful
@@ -166,7 +170,7 @@ Do not repeat the follow-up question after PHONE_LIST.
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
             messages=all_messages,
-            temperature=0.3
+            temperature=0.6
         )
 
         reply = response.choices[0].message.content
@@ -193,6 +197,21 @@ Do not repeat the follow-up question after PHONE_LIST.
                     phones.append(match.group(1).strip())
         else:
             print("PHONE_LIST not found")
+
+        previous = shown_phones_store[user_id]
+
+        filtered_phones = []
+        for p in phones:
+            if p not in previous:
+                filtered_phones.append(p)
+
+        # If model repeated phones, keep them anyway
+        if not filtered_phones:
+            filtered_phones = phones
+
+        shown_phones_store[user_id].extend(filtered_phones)
+
+        phones = filtered_phones[:3]
 
         # Remove PHONE_LIST from visible reply
         reply = re.split(r"PHONE_LIST:", reply, flags=re.IGNORECASE)[0].strip()
@@ -245,4 +264,6 @@ async def clear_chat(data: dict = Body(...)):
     if user_id in conversation_store:
         conversation_store[user_id] = []
 
+    if user_id in shown_phones_store:
+        shown_phones_store[user_id] = []
     return {"status": "cleared"}
