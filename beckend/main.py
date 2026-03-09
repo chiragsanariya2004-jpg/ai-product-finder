@@ -74,7 +74,7 @@ async def chat(data: ChatRequest):
         user_id = data.user_id  # later login system me dynamic hoga
 
         # Only take latest user message
-        recent_messages = [msg.dict() for msg in data.messages][-10:]
+        recent_messages = [msg.dict() for msg in data.messages][-4:]
         conversation_store[user_id] = recent_messages
 
         all_messages = [
