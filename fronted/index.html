@@ -60,19 +60,21 @@ header {
 /* CHAT AREA */
 #messages {
     flex: 1;
+    align-items:center;
     overflow-y: auto;
-    padding: 14px;
+    padding: 20px;
     padding-bottom: 120px;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    gap: 18px;
+    gap: 20px;
     scroll-behavior: smooth;
 }
 
 /* MESSAGE BASE */
 .message {
-    max-width: 80%;
+    max-width: 700px;
+    width:100%;
     position: relative;
     padding: 14px;
     border-radius: 16px;
@@ -159,6 +161,9 @@ text-align: left;
 }
 
 .bot h2 {
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    padding:12px;
+    border-radius:10px;
     font-size: 17px;
     margin: 10px 0 6px;
     color: #ffffff;
@@ -328,6 +333,7 @@ footer a:hover {
     background: rgba(15,23,42,0.95);
     border-top: 1px solid rgba(255,255,255,0.08);
     backdrop-filter: blur(15px);
+    box-shadow:0 -5px 20px rgba(0,0,0,0.3);
     z-index: 100;
 }
 
@@ -453,6 +459,21 @@ animation-delay:0.4s;
 40%{transform:scale(1)}
 }
 
+.quick-btn{
+background:#1e293b;
+padding:10px 14px;
+border-radius:20px;
+cursor:pointer;
+border:none;
+color:white;
+margin:4px;
+font-size:13px;
+}
+
+.quick-btn:hover{
+background:#7c3aed;
+}
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -497,9 +518,14 @@ animation-delay:0.4s;
 <body>
 
 <section id="hero">
-    <h1>Find Your Perfect Smartphone in Seconds</h1>
+    <h1>Find The Best Phone Under Your Budget in 10 Seconds</h1>
+
     <p>
         AI-powered recommendations based on your budget, gaming, camera & battery needs.
+    </p>
+
+    <p style="font-size:15px;margin-top:10px;">
+🔥     Gaming • Camera • Battery • 5G – AI will find the best phone
     </p>
 
     <p style="font-size:14px; opacity:0.7; margin-top:15px;">
@@ -513,7 +539,9 @@ animation-delay:0.4s;
 
 <section id="guideSection" style="padding:40px 20px; max-width:900px; margin:auto; text-align:center;">
 <h2>Best Phone Under 15000 and 20000 in India (2026)</h2>
+<button onclick="startChat()" class="hero-btn">
 
+</button>
 <p>
 Finding the best smartphone under ₹15000 or ₹20000 can be confusing because dozens of new phones launch every month.
 Our AI smartphone finder analyzes performance, camera quality, battery life, gaming benchmarks and price drops to suggest the best phone for your needs.
@@ -593,7 +621,10 @@ Simply ask our AI advisor your requirement and get instant smartphone recommenda
 
 <div id="chatSection" style="display:none;">
     <header>
-        <h1>AI Smartphone Advisor</h1>
+        <h1>📱 AI Smartphone Advisor</h1>
+        <p style="font-size:13px;opacity:0.7;">
+        Trusted by 1000+ users
+        </p>
         <button onclick="clearChat()" style="margin-top:10px; background:#ef4444;">
             Clear Chat
         </button>
@@ -612,11 +643,12 @@ Simply ask our AI advisor your requirement and get instant smartphone recommenda
 
     <div id="messages">
 
-    <div style="text-align:center; font-size:14px; opacity:0.8;">
-        Try:
-        <span onclick="quickMsg('15000 gaming phone')" style="color:#a78bfa; cursor:pointer;">15000 gaming phone</span> |
-        <span onclick="quickMsg('Best camera phone under 20000')" style="color:#a78bfa; cursor:pointer;">Best camera phone under 20000</span> |
-        <span onclick="quickMsg('5G phone with good battery')" style="color:#a78bfa; cursor:pointer;">5G phone with good battery</span>
+    <div style="text-align:center;margin-bottom:10px;">
+    <button class="quick-btn" onclick="quickMsg('gaming phone under 15000')">🎮 Gaming under 15000</button>
+
+    <button class="quick-btn" onclick="quickMsg('best camera phone under 20000')">📷 Camera under 20000</button>
+
+    <button class="quick-btn" onclick="quickMsg('5G phone with best battery')">🔋 Best battery phone</button>
     </div>
 
 </div>
@@ -649,9 +681,9 @@ function renderChat() {
             msgDiv.innerHTML = DOMPurify.sanitize(html, {
                 ALLOWED_TAGS: [
                     'h1','h2','h3','p','ul','li','strong','em','a','hr','br',
-                    'table','thead','tbody','tr','th','td'
+                    'table','thead','tbody','tr','th','td','img'
                 ],
-                ALLOWED_ATTR: ['href','target','rel','class'],
+                ALLOWED_ATTR: ['href','target','rel','class','src','alt','style'],
                 ADD_ATTR: ['target']
             });
 
@@ -950,9 +982,13 @@ function deleteMessage(id) {
 </script>
 
 <footer>
-  <p>
-    This page contains affiliate links. We may earn a commission at no extra cost to you.
-  </p>
+<p>
+© 2026 SmartPrompt AI • AI Powered Smartphone Finder
+</p>
+
+<p style="opacity:0.7;">
+This page contains affiliate links. We may earn a commission at no extra cost to you.
+</p>
 </footer>
 
 </body>
