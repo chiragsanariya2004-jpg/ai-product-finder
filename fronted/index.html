@@ -68,7 +68,7 @@ header {
     display: flex;
     flex-direction: column;
     min-height: 0;
-    gap: 20px;
+    gap: 14px;
     scroll-behavior: smooth;
 }
 
@@ -114,12 +114,16 @@ header {
 }
 
 /* USER MESSAGE */
-.user {
-    align-self: flex-end;
-    background: #2563eb;
-    color: white;
-    border-bottom-right-radius: 6px;
-
+.user-message {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 14px;
+  max-width: 75%;
+  width: fit-content;
+  word-wrap: break-word;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 .user .delete-btn{
@@ -139,13 +143,16 @@ text-align: left;
 /* BOT MESSAGE */
 .bot {
     display: block;
+    padding: 12px 16px;
     margin-top: 14px;
     align-self: flex-start;
-    background: rgba(255,255,255,0.05);
+    background: linear-gradient(135deg, #312e81, #1e1b4b);
     border: 1px solid rgba(255,255,255,0.08);
-    color: #f1f5f9;
+    color: #e2e8f0;
+    max-width: 85%;
     border-bottom-left-radius: 6px;
     backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
 }
 
 /* Markdown Styling */
